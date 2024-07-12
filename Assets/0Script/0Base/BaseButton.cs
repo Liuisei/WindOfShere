@@ -1,8 +1,12 @@
-using Unity.VisualScripting;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
+
+/// <summary>
+/// ボタンのクリック時に音を鳴らす機能や、アニメーションを再生する。
+/// public UnityEvent _onClickUnityAction;でクリック時のUnityEventを設定できる。
+/// </summary>
 
 public abstract class BaseButton : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler,
     IPointerClickHandler
@@ -11,6 +15,8 @@ public abstract class BaseButton : MonoBehaviour, IPointerDownHandler, IPointerE
     [SerializeField] private AudioClip _enterSe;
     [SerializeField] private AudioClip _clickedSe;
     [SerializeField] private Animator _animator;
+    private bool _isAnimatingLocked ;
+
     protected abstract void OnClicked();
 
     public void OnPointerDown(PointerEventData eventData)
@@ -42,40 +48,53 @@ public abstract class BaseButton : MonoBehaviour, IPointerDownHandler, IPointerE
     }
 
     //Play Sound
-    public void PlayEnterSound()
+    private void PlayEnterSound()
     {
         if (_enterSe == null) return;
         SoundManager.Instance.PlaySE(_enterSe);
     }
 
-    public void PlayClickedSound()
+    private void PlayClickedSound()
     {
         if (_clickedSe == null) return;
         SoundManager.Instance.PlaySE(_clickedSe);
     }
-
     //Play Animation
-    public void PlayEnterAnimation()
+    private void PlayEnterAnimation()
     {
-        if (_animator == null) return;
+        if (AnimatorAndLockedChack()) return;
         _animator.Play("Enter");
     }
 
-    public void PlayExitAnimation()
+    private void PlayExitAnimation()
     {
-        if (_animator == null) return;
+        if (AnimatorAndLockedChack()) return;
         _animator.Play("Exit");
     }
 
-    public void PlayDawnAnimation()
+    private void PlayDawnAnimation()
     {
-        if (_animator == null) return;
+        if (AnimatorAndLockedChack()) return;
         _animator.Play("Dawn");
     }
 
-    public void PlayClickAnimation()
+    private void PlayClickAnimation()
     {
-        if (_animator == null) return;
+        if (AnimatorAndLockedChack()) return;
         _animator.Play("Click");
+        StartCoroutine(LockAnimationForSeconds(1f));
+    }
+
+    private bool AnimatorAndLockedChack()
+    {
+        if (_animator == null || _isAnimatingLocked ) return true;
+        return false;
+    }
+
+    private IEnumerator LockAnimationForSeconds(float seconds)
+    {
+        _isAnimatingLocked = true;
+        yield return new WaitForSeconds(seconds);
+        _isAnimatingLocked = false;
     }
 }

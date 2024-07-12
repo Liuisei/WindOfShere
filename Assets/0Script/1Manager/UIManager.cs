@@ -1,47 +1,60 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
-using UnityEngine.Serialization;
 
-[DefaultExecutionOrder(-100)]
-public class SoundManager : BaseSingleton<SoundManager>
+[DefaultExecutionOrder(-99)]
+public class UIManager : BaseSingleton<UIManager>
 {
-    [SerializeField] AudioMixer _audioMixer;
-    [SerializeField] AudioSource _bgmAudioSource;
-    [SerializeField] AudioSource _seAudioSource;
+    [SerializeField] private List<UITypeClass> _uiTypeList = new List<UITypeClass>();
 
-    protected override void AwakeFunction()
+    public void ShowUI(UITypeClass.EnumUIType uiType)
     {
-        if (_bgmAudioSource == null) Debug.LogError("BGM AudioSource is null.");
-        if (_seAudioSource == null) Debug.LogError("SE AudioSource is null.");
+        var targetUITypeClass = _uiTypeList.Find(e => e._uiType == uiType);
+        if (targetUITypeClass == null)
+        {
+            Debug.LogError("UI Type not found");
+            return;
+        }
+
+        if (targetUITypeClass._spawnedUI == null)
+        {
+            targetUITypeClass._spawnedUI =
+                Instantiate(targetUITypeClass._uiPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        }
+        else
+        {
+            targetUITypeClass._spawnedUI.SetActive(true);
+        }
     }
 
-    /// <summary> BGMを再生 </summary> ///
-    public void PlayBGM(AudioClip audioClipBGM)
+    public void HideUI(UITypeClass.EnumUIType uiType)
     {
-        _bgmAudioSource.clip = audioClipBGM;
-        _bgmAudioSource.Play();
+        var targetUITypeClass = _uiTypeList.Find(e => e._uiType == uiType);
+        if (targetUITypeClass == null)
+        {
+            Debug.LogError("UI Type not found");
+            return;
+        }
+
+        if (targetUITypeClass._spawnedUI != null)
+        {
+            targetUITypeClass._spawnedUI.SetActive(false);
+        }
+    }
+}
+
+[Serializable]
+public class UITypeClass
+{
+    public enum EnumUIType
+    {
+        Empty,
+        Game,
+        Settings,
+        Title,
     }
 
-    /// <summary> SEを再生 </summary> ///
-    public void PlaySE(AudioClip audioClipSE)
-    {
-        _seAudioSource.PlayOneShot(audioClipSE);
-    }
-
-    public void MuteBGM(bool mute)
-    {
-        _bgmAudioSource.mute = mute;
-    }
-
-    public void MuteSE(bool mute)
-    {
-        _seAudioSource.mute = mute;
-    }
-
-    public void SetVolumeBGM(float volume)
-    {
-        _audioMixer.SetFloat("BGM", volume);
-    }
+    public EnumUIType _uiType;
+    public GameObject _uiPrefab;
+    [HideInInspector] public GameObject _spawnedUI;
 }

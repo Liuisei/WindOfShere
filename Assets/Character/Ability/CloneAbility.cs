@@ -9,6 +9,7 @@ public class CloneAbility : IAbility
 
     public void Ability()
     {
+        //ToDo:分身の実装
         Debug.Log("分身を発動した");
     }
 }

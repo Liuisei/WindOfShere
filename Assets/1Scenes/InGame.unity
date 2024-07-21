@@ -309,12 +309,52 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7673021541091838782, guid: 86922f89ce755d747ad419996a0715f4, type: 3}
     - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
+      propertyPath: _maxWindSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
+      propertyPath: _timeline.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
+      propertyPath: _windSpeed.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
       propertyPath: _characters.Array.size
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
+      propertyPath: _stageEnemies.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
+      propertyPath: _windSpeed.Array.data[0]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
+      propertyPath: _windSpeed.Array.data[1]
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
+      propertyPath: _characters.Array.data[0]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
+      propertyPath: _characters.Array.data[2]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
       propertyPath: _allStageEnemies.Array.size
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
+      propertyPath: _stageEnemies.Array.data[0]
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
+      propertyPath: _stageEnemies.Array.data[1]
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
       propertyPath: _allStageEnemies.Array.data[0]
@@ -591,45 +631,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1417741891168188645, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.0005493164
-      objectReference: {fileID: 0}
-    - target: {fileID: 1417741891168188645, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0.0005493164
-      objectReference: {fileID: 0}
-    - target: {fileID: 2583870637560361189, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0.0005493164
-      objectReference: {fileID: 0}
-    - target: {fileID: 4792846629215784131, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -0.0004272461
-      objectReference: {fileID: 0}
-    - target: {fileID: 5437271846277288473, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.0005493164
-      objectReference: {fileID: 0}
-    - target: {fileID: 5437271846277288473, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0.0005493164
-      objectReference: {fileID: 0}
     - target: {fileID: 8028016897866781962, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
       propertyPath: m_Name
       value: UIDebugInGame
-      objectReference: {fileID: 0}
-    - target: {fileID: 8085807005965279689, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0.0005493164
-      objectReference: {fileID: 0}
-    - target: {fileID: 9022309226942258609, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.0005493164
-      objectReference: {fileID: 0}
-    - target: {fileID: 9022309226942258609, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0.0005493164
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -15,6 +15,7 @@ public class InGameDebug : MonoBehaviour
     [SerializeField] private Text _windSpeed;      // 現在の風速
     [SerializeField] private Text _floorCount;     // 現在のステージ
     [SerializeField] private Text _playerHp;       // プレイヤーのHP合計
+    [SerializeField] private Text _gameState;      // ゲームの状態
 
     private InGameManager _inGameManagerInstance;
 
@@ -31,6 +32,7 @@ public class InGameDebug : MonoBehaviour
         _inGameManagerInstance.OnWindSpeedChanged += WindSpeedChanged;
         _inGameManagerInstance.OnCurrentStageChanged += FloorCountChanged;
         _inGameManagerInstance.OnPlayerHpChanged += PlayerHpChanged;
+        _inGameManagerInstance.OnGameStateChanged += GameStateChanged;
         InitializeTextFields();
     }
 
@@ -46,6 +48,7 @@ public class InGameDebug : MonoBehaviour
         _inGameManagerInstance.OnWindSpeedChanged -= WindSpeedChanged;
         _inGameManagerInstance.OnCurrentStageChanged -= FloorCountChanged;
         _inGameManagerInstance.OnPlayerHpChanged -= PlayerHpChanged;
+        _inGameManagerInstance.OnGameStateChanged -= GameStateChanged;
     }
 
     private void InitializeTextFields()
@@ -60,46 +63,49 @@ public class InGameDebug : MonoBehaviour
         WindSpeedChanged(_inGameManagerInstance.WindSpeed);
         FloorCountChanged(_inGameManagerInstance.CurrentStage);
         PlayerHpChanged(_inGameManagerInstance.PlayerHp);
+        GameStateChanged(_inGameManagerInstance.GameState);
     }
 
     void TimelineChanged(List<GameObject> timeline)
     {
-        _timeline.text = string.Join(", ", timeline.ConvertAll(t => t.name).ToArray());
+        _timeline.text = "Timeline: " + string.Join(",", timeline.ConvertAll(t => t.name).ToArray());
     }
 
     void PartyCharactersChanged(List<int> characters)
     {
-        _characters.text = string.Join(", ", characters.ConvertAll(c => c.ToString()).ToArray());
+        _characters.text = "Party Characters: " + string.Join(",", characters.ConvertAll(c => c.ToString()).ToArray());
     }
 
     void StageEnemiesChanged(List<string> stageEnemies)
     {
-        _stageEnemies.text = string.Join(", ", stageEnemies.ToArray());
+        _stageEnemies.text = "Stage Enemies: " + string.Join("\n", stageEnemies.ToArray());
     }
 
     void FloorEnemiesChanged(List<int> floorEnemies)
     {
-        _floorEnemies.text = string.Join(", ", floorEnemies.ConvertAll(e => e.ToString()).ToArray());
+        _floorEnemies.text = "Enemies: " + string.Join(",", floorEnemies.ConvertAll(e => e.ToString()).ToArray());
     }
 
     void FloorEnemiesHpChanged(List<int> floorEnemiesHp)
     {
-        _floorEnemiesHp.text = string.Join(", ", floorEnemiesHp.ConvertAll(hp => hp.ToString()).ToArray());
+        _floorEnemiesHp.text =
+            "EnemiesHP : " + string.Join(",", floorEnemiesHp.ConvertAll(hp => hp.ToString()).ToArray());
     }
 
     void EnemyCountChanged(int enemyCount)
     {
-        _enemyCount.text = enemyCount.ToString();
+        _enemyCount.text = "Enemy Count: " + enemyCount.ToString();
     }
 
     void MaxWindSpeedChanged(int maxWindSpeed)
     {
-        _maxWindSpeed.text = maxWindSpeed.ToString();
+        _maxWindSpeed.text = "Max Wind Speed: " + maxWindSpeed.ToString();
     }
 
     void WindSpeedChanged(List<int> windSpeed)
     {
-        _windSpeed.text = windSpeed.ToString();
+        _windSpeed.text = " Current Wind Speed: " +
+                          string.Join("\n", windSpeed.ConvertAll(s => s.ToString()).ToArray());
     }
 
     void FloorCountChanged(int currentStage)
@@ -109,6 +115,11 @@ public class InGameDebug : MonoBehaviour
 
     void PlayerHpChanged(int playerHp)
     {
-        _playerHp.text = playerHp.ToString();
+        _playerHp.text = "Player HP: " + playerHp.ToString();
+    }
+
+    void GameStateChanged(GameState gameState)
+    {
+        _gameState.text = "Game State: " + gameState;
     }
 }

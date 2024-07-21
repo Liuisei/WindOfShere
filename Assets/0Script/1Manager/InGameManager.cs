@@ -18,13 +18,14 @@ public class InGameManager : MonoBehaviour
     [SerializeField] private List<int> _floorEnemiesHp;  // フロアの敵のHPのリスト
     [SerializeField] private int _enemyCount;            // 敵の数
     [SerializeField] private int _maxWindSpeed;          // 最大風速
-    [SerializeField] private List<int> _windSpeed;             // 現在の風速
+    [SerializeField] private List<int> _windSpeed;       // 現在の風速
     [SerializeField] private int _currentStage;          // 現在のステージ
     [SerializeField] private int _playerHp;              // プレイヤーのHP合計
+    [SerializeField] private GameState _gameState;       // ゲームの状態
 
 
     ////// Action //////
-    
+
     public event Action<List<GameObject>> OnTimelineChanged;
     public event Action<List<int>> OnPartyCharactersChanged;
     public event Action<List<string>> OnStageEnemiesChanged;
@@ -35,6 +36,7 @@ public class InGameManager : MonoBehaviour
     public event Action<List<int>> OnWindSpeedChanged;
     public event Action<int> OnCurrentStageChanged;
     public event Action<int> OnPlayerHpChanged;
+    public event Action<GameState> OnGameStateChanged;
 
     ////// property //////
     public GameObject CardPrefab
@@ -148,6 +150,15 @@ public class InGameManager : MonoBehaviour
             OnPlayerHpChanged?.Invoke(_playerHp);
         }
     }
+    public GameState GameState
+    {
+        get => _gameState;
+        set
+        {
+            _gameState = value;
+            OnGameStateChanged?.Invoke(_gameState);
+        }
+    }
 
     ////// Function //////
     private void Awake()
@@ -162,21 +173,47 @@ public class InGameManager : MonoBehaviour
         }
     }
 
-    public void Initialize()
+
+    public void StartInGame()
     {
         
     }
-    public void UpdateAll()
+    public void Animation()
     {
-        Timeline = _timeline;
-        Characters = _characters;
-        StageEnemies = _stageEnemies;
-        FloorEnemies = _floorEnemies;
-        FloorEnemiesHp = _floorEnemiesHp;
-        EnemyCount = _enemyCount;
-        MaxWindSpeed = _maxWindSpeed;
-        WindSpeed = _windSpeed;
-        CurrentStage = _currentStage;
-        PlayerHp = _playerHp;
+        
     }
+    public void EnemySet()
+    {
+        
+    }
+
+    public void EnemyHpSet()
+    {
+        
+    }
+    public void PlayerSet()
+    {
+        
+    }
+    public void TimeLineSet()
+    {
+        
+    }
+    public void WindSet()
+    {
+        
+    }
+    public void PlayerHpSet()
+    {
+        
+    }
+}
+
+public enum GameState
+{
+    Movie,        // 動画再生中
+    PlayerAction, // プレイヤー行動中
+    EnemyAction,  // 敵行動中
+    Result,       // 結果発表中
+    Menu,         // メニュー画面
 }

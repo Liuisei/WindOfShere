@@ -6,8 +6,8 @@ using UnityEngine.EventSystems;
 /// <summary>
 /// ボタンのクリック時に音を鳴らす機能や、アニメーションを再生する。
 /// public UnityEvent _onClickUnityAction;でクリック時のUnityEventを設定できる。
+/// アニメーションOBJとクリックの判定範囲を分けて下さい。
 /// </summary>
-
 public abstract class BaseButton : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler,
     IPointerClickHandler
 {
@@ -15,19 +15,44 @@ public abstract class BaseButton : MonoBehaviour, IPointerDownHandler, IPointerE
     [SerializeField] private AudioClip _enterSe;
     [SerializeField] private AudioClip _clickedSe;
     [SerializeField] private Animator _animator;
-    private bool _isAnimatingLocked ;
+    [SerializeField] private float _clickCoolTime = 1f;
+    private bool _isButtonLocked;
 
+    /// <summary>
+    /// クリック時の処理を実装する。
+    /// </summary>
     protected abstract void OnClicked();
+
+    private bool AnimatorChack()
+    {
+        if (_animator == null) return true;
+        return false;
+    }
+
+    private bool LockCheck()
+    {
+        if (_isButtonLocked) return true;
+        return false;
+    }
+
+    private IEnumerator LockAnimationForSeconds(float seconds)
+    {
+        _isButtonLocked = true;
+        yield return new WaitForSeconds(seconds);
+        _isButtonLocked = false;
+    }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         Debug.Log("OnPointerDown");
+        if (LockCheck()) return;
         PlayDawnAnimation();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         Debug.Log("OnPointerEnter");
+        if (LockCheck()) return;
         PlayEnterSound();
         PlayEnterAnimation();
     }
@@ -35,16 +60,19 @@ public abstract class BaseButton : MonoBehaviour, IPointerDownHandler, IPointerE
     public void OnPointerExit(PointerEventData eventData)
     {
         Debug.Log("OnPointerExit");
+        if (LockCheck()) return;
         PlayExitAnimation();
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         Debug.Log("OnPointerClick");
+        if (LockCheck()) return;
         _onClickUnityAction?.Invoke();
         OnClicked();
         PlayClickedSound();
         PlayClickAnimation();
+        StartCoroutine(LockAnimationForSeconds(_clickCoolTime));
     }
 
     //Play Sound
@@ -59,42 +87,29 @@ public abstract class BaseButton : MonoBehaviour, IPointerDownHandler, IPointerE
         if (_clickedSe == null) return;
         SoundManager.Instance.PlaySE(_clickedSe);
     }
+
     //Play Animation
     private void PlayEnterAnimation()
     {
-        if (AnimatorAndLockedChack()) return;
+        if (AnimatorChack()) return;
         _animator.Play("Enter");
     }
 
     private void PlayExitAnimation()
     {
-        if (AnimatorAndLockedChack()) return;
+        if (AnimatorChack()) return;
         _animator.Play("Exit");
     }
 
     private void PlayDawnAnimation()
     {
-        if (AnimatorAndLockedChack()) return;
+        if (AnimatorChack()) return;
         _animator.Play("Dawn");
     }
 
     private void PlayClickAnimation()
     {
-        if (AnimatorAndLockedChack()) return;
+        if (AnimatorChack()) return;
         _animator.Play("Click");
-        StartCoroutine(LockAnimationForSeconds(1f));
-    }
-
-    private bool AnimatorAndLockedChack()
-    {
-        if (_animator == null || _isAnimatingLocked ) return true;
-        return false;
-    }
-
-    private IEnumerator LockAnimationForSeconds(float seconds)
-    {
-        _isAnimatingLocked = true;
-        yield return new WaitForSeconds(seconds);
-        _isAnimatingLocked = false;
     }
 }

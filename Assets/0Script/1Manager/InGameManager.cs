@@ -150,6 +150,7 @@ public class InGameManager : MonoBehaviour
             OnPlayerHpChanged?.Invoke(_playerHp);
         }
     }
+
     public GameState GameState
     {
         get => _gameState;
@@ -173,39 +174,44 @@ public class InGameManager : MonoBehaviour
         }
     }
 
-
     public void StartInGame()
     {
-        
+        Debug.Log("StartInGame");
     }
+
     public void Animation()
     {
-        
+        Debug.Log("Animation");
     }
+
     public void EnemySet()
     {
-        
+        Debug.Log("EnemySet");
     }
 
     public void EnemyHpSet()
     {
-        
+        Debug.Log("EnemyHpSet");
     }
-    public void PlayerSet()
+
+    public void PlayerSetAnim()
     {
-        
+        Debug.Log("PlayerSetAnim");
     }
+
     public void TimeLineSet()
     {
-        
+        Debug.Log("TimeLineSet");
     }
+
     public void WindSet()
     {
-        
+        Debug.Log("WindSet");
     }
+
     public void PlayerHpSet()
     {
-        
+        Debug.Log("PlayerHpSet");
     }
 }
 

@@ -21,6 +21,7 @@ public class InGameManager : MonoBehaviour
     [SerializeField] private List<int> _windSpeed;       // 現在の風速
     [SerializeField] private int _currentStage;          // 現在のステージ
     [SerializeField] private int _playerHp;              // プレイヤーのHP合計
+    [SerializeField] private int _playerMaxHp;           // プレイヤーの最大HP
     [SerializeField] private GameState _gameState;       // ゲームの状態
 
 
@@ -36,6 +37,7 @@ public class InGameManager : MonoBehaviour
     public event Action<List<int>> OnWindSpeedChanged;
     public event Action<int> OnCurrentStageChanged;
     public event Action<int> OnPlayerHpChanged;
+    public event Action<int> OnPlayerMaxHpChanged;
     public event Action<GameState> OnGameStateChanged;
 
     ////// property //////
@@ -148,6 +150,16 @@ public class InGameManager : MonoBehaviour
         {
             _playerHp = value;
             OnPlayerHpChanged?.Invoke(_playerHp);
+        }
+    }
+
+    public int PlayerMaxHp
+    {
+        get => _playerMaxHp;
+        set
+        {
+            _playerMaxHp = value;
+            OnPlayerMaxHpChanged?.Invoke(_playerMaxHp);
         }
     }
 

@@ -154,7 +154,7 @@ public class InGameManager : MonoBehaviour
     public GameState GameState
     {
         get => _gameState;
-        set
+        private set
         {
             _gameState = value;
             OnGameStateChanged?.Invoke(_gameState);
@@ -177,49 +177,95 @@ public class InGameManager : MonoBehaviour
     public void StartInGame()
     {
         Debug.Log("StartInGame");
+        GameState = GameState.StartInGame;
     }
 
-    public void Animation()
+    public void Movie()
     {
         Debug.Log("Animation");
+        GameState = GameState.Movie;
+    }
+
+    public void Speaking()
+    {
+        Debug.Log("SpeakingEvent");
+        GameState = GameState.Speaking;
     }
 
     public void EnemySet()
     {
         Debug.Log("EnemySet");
+        GameState = GameState.EnemySet;
     }
 
     public void EnemyHpSet()
     {
         Debug.Log("EnemyHpSet");
+        GameState = GameState.EnemyHpSet;
     }
 
-    public void PlayerSetAnim()
+    public void PlayerSet()
     {
         Debug.Log("PlayerSetAnim");
+        GameState = GameState.PlayerSet;
     }
 
     public void TimeLineSet()
     {
         Debug.Log("TimeLineSet");
+        GameState = GameState.TimeLineSet;
     }
 
     public void WindSet()
     {
         Debug.Log("WindSet");
+        GameState = GameState.WindSet;
     }
 
     public void PlayerHpSet()
     {
         Debug.Log("PlayerHpSet");
+        GameState = GameState.PlayerHpSet;
+    }
+
+    public void EnemyAction()
+    {
+        Debug.Log("EnemyAction");
+        GameState = GameState.EnemyAction;
+    }
+
+    public void PlayerAction()
+    {
+        Debug.Log("PlayerAction");
+        GameState = GameState.PlayerAction;
+    }
+
+    public void Menu()
+    {
+        Debug.Log("Menu");
+        GameState = GameState.Menu;
+    }
+
+    public void Result()
+    {
+        Debug.Log("Result");
+        GameState = GameState.Result;
     }
 }
 
 public enum GameState
 {
-    Movie,        // 動画再生中
-    PlayerAction, // プレイヤー行動中
-    EnemyAction,  // 敵行動中
-    Result,       // 結果発表中
-    Menu,         // メニュー画面
+    StartInGame,
+    Movie,
+    Speaking,
+    EnemySet,
+    EnemyHpSet,
+    PlayerSet,
+    TimeLineSet,
+    WindSet,
+    PlayerHpSet,
+    EnemyAction,
+    PlayerAction,
+    Menu,
+    Result
 }

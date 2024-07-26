@@ -1,16 +1,17 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
-
+/// <summary>
+/// インゲームマネージャーは インゲーム 全体の管理者です。
+/// プレイヤーのが行った操作がここに流れて、ゲームの状態が変化します。
+/// 変数が変化したときに対応のイベントを発火させることで、登録されてる関数が呼び出されます。
+/// 関数はGUIの更新だけ
+/// </summary>
 [DefaultExecutionOrder(-100)]
 public class InGameManager : MonoBehaviour
 {
     public static InGameManager Instance { get; private set; }
-
-    [SerializeField] private GameObject _cardPrefab;     // カードのプレハブ
-    [SerializeField] private GameObject _cardCanvas;     // プレイヤーのTimeLineCanvas
+    
     [SerializeField] private List<GameObject> _timeline; // タイムラインのリスト
     [SerializeField] private List<int> _characters;      // Partyキャラクターのリスト
     [SerializeField] private List<string> _stageEnemies; // ステージの敵のリスト
@@ -40,17 +41,7 @@ public class InGameManager : MonoBehaviour
     public event Action<GameState> OnGameStateChanged;
 
     ////// property //////
-    public GameObject CardPrefab
-    {
-        get => _cardPrefab;
-        set => _cardPrefab = value;
-    }
-
-    public GameObject CardCanvas
-    {
-        get => _cardCanvas;
-        set => _cardCanvas = value;
-    }
+    
 
     public List<GameObject> Timeline
     {
@@ -232,19 +223,16 @@ public class InGameManager : MonoBehaviour
         Debug.Log("WindSet");
         GameState = GameState.WindSet;
     }
-
     public void PlayerHpSet()
     {
         Debug.Log("PlayerHpSet");
         GameState = GameState.PlayerHpSet;
     }
-
     public void EnemyAction()
     {
         Debug.Log("EnemyAction");
         GameState = GameState.EnemyAction;
     }
-
     public void PlayerAction()
     {
         Debug.Log("PlayerAction");
@@ -261,6 +249,11 @@ public class InGameManager : MonoBehaviour
     {
         Debug.Log("Result");
         GameState = GameState.Result;
+    }
+
+    public void PlayerHPChaged(int value)
+    {
+        PlayerHp += value;
     }
 }
 

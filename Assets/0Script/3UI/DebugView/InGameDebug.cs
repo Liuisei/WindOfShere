@@ -1,7 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+/// <summary>
+/// インゲームの状態を見れるようにしたデバッグ用のUIです。
+/// 各種イベントを監視し、テキストフィールドに表示します。
+/// </summary>
 [DefaultExecutionOrder(100)]
 public class InGameDebug : MonoBehaviour
 {

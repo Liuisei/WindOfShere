@@ -5,7 +5,25 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/1Scenes/Happy.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/1Scenes/Title.unity
+    guid: bdd4649681208ea4fad78439e0e0bbe1
+  - enabled: 1
+    path: Assets/1Scenes/MasterScene.unity
+    guid: 6f4b6f6a0f3f669419d6505025272fb9
+  - enabled: 1
+    path: Assets/1Scenes/Home.unity
+    guid: 0d5a253a3a95ea54897f4c3bd63cca4a
+  - enabled: 1
+    path: Assets/1Scenes/QuestSelectScene.unity
+    guid: 15738f364784b7d489af662c1a5ff044
+  - enabled: 1
+    path: Assets/1Scenes/InGame.unity
+    guid: c910de52df4af9f4d969784b8e8058db
+  - enabled: 1
+    path: Assets/1Scenes/TeamSelectScene.unity
+    guid: 6cbfbdc392869e14dbf33664189d5c41
   m_configObjects: {}

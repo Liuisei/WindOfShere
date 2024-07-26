@@ -23,8 +23,8 @@ public class GameSceneManager : MonoBehaviour
 
     public void SceneMove(string loadSceneName)
     {
-        SceneManager.LoadScene(loadSceneName,LoadSceneMode.Additive);
         SceneManager.UnloadSceneAsync(_openingSceneName);
+        SceneManager.LoadScene(loadSceneName,LoadSceneMode.Additive);
         _openingSceneName = loadSceneName;
     }
 }

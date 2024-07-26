@@ -1,13 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class SceneMove : MonoBehaviour
 {
-    [SerializeField] private string _sceneName;
-    public void MoveScene()
+    public void MoveScene(string sceneName)
     {
-        GameSceneManager.Instance.SceneMove(_sceneName);
+        Debug.Log(sceneName);
+        GameSceneManager.Instance.SceneMove(sceneName);
     }
 }

@@ -18,13 +18,15 @@ public class InGameManager : MonoBehaviour
     [SerializeField] private List<int> _floorEnemiesHp;  // フロアの敵のHPのリスト
     [SerializeField] private int _enemyCount;            // 敵の数
     [SerializeField] private int _maxWindSpeed;          // 最大風速
-    [SerializeField] private List<int> _windSpeed;             // 現在の風速
+    [SerializeField] private List<int> _windSpeed;       // 現在の風速
     [SerializeField] private int _currentStage;          // 現在のステージ
     [SerializeField] private int _playerHp;              // プレイヤーのHP合計
+    [SerializeField] private int _playerMaxHp;           // プレイヤーの最大HP
+    [SerializeField] private GameState _gameState;       // ゲームの状態
 
 
     ////// Action //////
-    
+
     public event Action<List<GameObject>> OnTimelineChanged;
     public event Action<List<int>> OnPartyCharactersChanged;
     public event Action<List<string>> OnStageEnemiesChanged;
@@ -35,6 +37,8 @@ public class InGameManager : MonoBehaviour
     public event Action<List<int>> OnWindSpeedChanged;
     public event Action<int> OnCurrentStageChanged;
     public event Action<int> OnPlayerHpChanged;
+    public event Action<int> OnPlayerMaxHpChanged;
+    public event Action<GameState> OnGameStateChanged;
 
     ////// property //////
     public GameObject CardPrefab
@@ -149,6 +153,26 @@ public class InGameManager : MonoBehaviour
         }
     }
 
+    public int PlayerMaxHp
+    {
+        get => _playerMaxHp;
+        set
+        {
+            _playerMaxHp = value;
+            OnPlayerMaxHpChanged?.Invoke(_playerMaxHp);
+        }
+    }
+
+    public GameState GameState
+    {
+        get => _gameState;
+        private set
+        {
+            _gameState = value;
+            OnGameStateChanged?.Invoke(_gameState);
+        }
+    }
+
     ////// Function //////
     private void Awake()
     {
@@ -162,21 +186,98 @@ public class InGameManager : MonoBehaviour
         }
     }
 
-    public void Initialize()
+    public void StartInGame()
     {
-        
+        Debug.Log("StartInGame");
+        GameState = GameState.StartInGame;
     }
-    public void UpdateAll()
+
+    public void Movie()
     {
-        Timeline = _timeline;
-        Characters = _characters;
-        StageEnemies = _stageEnemies;
-        FloorEnemies = _floorEnemies;
-        FloorEnemiesHp = _floorEnemiesHp;
-        EnemyCount = _enemyCount;
-        MaxWindSpeed = _maxWindSpeed;
-        WindSpeed = _windSpeed;
-        CurrentStage = _currentStage;
-        PlayerHp = _playerHp;
+        Debug.Log("Animation");
+        GameState = GameState.Movie;
     }
+
+    public void Speaking()
+    {
+        Debug.Log("SpeakingEvent");
+        GameState = GameState.Speaking;
+    }
+
+    public void EnemySet()
+    {
+        Debug.Log("EnemySet");
+        GameState = GameState.EnemySet;
+    }
+
+    public void EnemyHpSet()
+    {
+        Debug.Log("EnemyHpSet");
+        GameState = GameState.EnemyHpSet;
+    }
+
+    public void PlayerSet()
+    {
+        Debug.Log("PlayerSetAnim");
+        GameState = GameState.PlayerSet;
+    }
+
+    public void TimeLineSet()
+    {
+        Debug.Log("TimeLineSet");
+        GameState = GameState.TimeLineSet;
+    }
+
+    public void WindSet()
+    {
+        Debug.Log("WindSet");
+        GameState = GameState.WindSet;
+    }
+
+    public void PlayerHpSet()
+    {
+        Debug.Log("PlayerHpSet");
+        GameState = GameState.PlayerHpSet;
+    }
+
+    public void EnemyAction()
+    {
+        Debug.Log("EnemyAction");
+        GameState = GameState.EnemyAction;
+    }
+
+    public void PlayerAction()
+    {
+        Debug.Log("PlayerAction");
+        GameState = GameState.PlayerAction;
+    }
+
+    public void Menu()
+    {
+        Debug.Log("Menu");
+        GameState = GameState.Menu;
+    }
+
+    public void Result()
+    {
+        Debug.Log("Result");
+        GameState = GameState.Result;
+    }
+}
+
+public enum GameState
+{
+    StartInGame,
+    Movie,
+    Speaking,
+    EnemySet,
+    EnemyHpSet,
+    PlayerSet,
+    TimeLineSet,
+    WindSet,
+    PlayerHpSet,
+    EnemyAction,
+    PlayerAction,
+    Menu,
+    Result
 }

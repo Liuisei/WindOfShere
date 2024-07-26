@@ -44,14 +44,12 @@ public abstract class BaseButton : MonoBehaviour, IPointerDownHandler, IPointerE
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("OnPointerDown");
         if (LockCheck()) return;
         PlayDawnAnimation();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("OnPointerEnter");
         if (LockCheck()) return;
         PlayEnterSound();
         PlayEnterAnimation();
@@ -59,14 +57,12 @@ public abstract class BaseButton : MonoBehaviour, IPointerDownHandler, IPointerE
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log("OnPointerExit");
         if (LockCheck()) return;
         PlayExitAnimation();
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("OnPointerClick");
         if (LockCheck()) return;
         _onClickUnityAction?.Invoke();
         OnClicked();

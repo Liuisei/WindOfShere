@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.Serialization;
 
 [DefaultExecutionOrder(-100)]
 public class SoundManager : BaseSingleton<SoundManager>

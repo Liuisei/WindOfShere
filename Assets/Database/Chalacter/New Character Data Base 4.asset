@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57e6c728edd2e16469b3d5cae61e0171, type: 3}
   m_Name: New Character Data Base 4
   m_EditorClassIdentifier: 
-  _characterId: 0
-  _characterName: 
-  _hp: 0
-  _attack: 0
+  _characterId: 4
+  _characterName: yosi
+  _hp: 30
+  _attack: 30
   _commandList: {fileID: 0}

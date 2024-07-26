@@ -23,8 +23,7 @@ public class InGameManager : MonoBehaviour
     [SerializeField] private int _playerHp;              // プレイヤーのHP合計
     [SerializeField] private int _playerMaxHp;           // プレイヤーの最大HP
     [SerializeField] private GameState _gameState;       // ゲームの状態
-
-
+    
     ////// Action //////
 
     public event Action<List<GameObject>> OnTimelineChanged;

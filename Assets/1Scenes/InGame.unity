@@ -122,6 +122,22 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &24529359 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2530588610022511004, guid: 2c4875eb137cd694ea1e77149c462914, type: 3}
+  m_PrefabInstance: {fileID: 7550143226819251802}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &24529361 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5227826160997172941, guid: 2c4875eb137cd694ea1e77149c462914, type: 3}
+  m_PrefabInstance: {fileID: 7550143226819251802}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 24529359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &323853515 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
@@ -312,6 +328,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
+      propertyPath: _playerHp
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
       propertyPath: _cardCanvas
       value: 
       objectReference: {fileID: 0}
@@ -319,6 +339,10 @@ PrefabInstance:
       propertyPath: _cardPrefab
       value: 
       objectReference: {fileID: 7673021541091838782, guid: 86922f89ce755d747ad419996a0715f4, type: 3}
+    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
+      propertyPath: _playerMaxHp
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
       propertyPath: _maxWindSpeed
       value: 2
@@ -1036,7 +1060,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8028016897866781962, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8051997488444665239, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1191,6 +1215,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3425569029694891968, guid: 2c4875eb137cd694ea1e77149c462914, type: 3}
+      propertyPath: _characterHpSlider
+      value: 
+      objectReference: {fileID: 24529359}
+    - target: {fileID: 3425569029694891968, guid: 2c4875eb137cd694ea1e77149c462914, type: 3}
+      propertyPath: _characterHpSliderSlider
+      value: 
+      objectReference: {fileID: 24529361}
     - target: {fileID: 4446815753592989717, guid: 2c4875eb137cd694ea1e77149c462914, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

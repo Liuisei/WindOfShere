@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
 /// <summary>
 /// インゲームの状態を見れるようにしたデバッグ用のUIです。
 /// 各種イベントを監視し、テキストフィールドに表示します。
@@ -65,7 +66,7 @@ public class InGameDebug : MonoBehaviour
         MaxWindSpeedChanged(_inGameManagerInstance.MaxWindSpeed);
         WindSpeedChanged(_inGameManagerInstance.WindSpeed);
         FloorCountChanged(_inGameManagerInstance.CurrentStage);
-        PlayerHpChanged(_inGameManagerInstance.PlayerHp);
+        PlayerHpChanged(_inGameManagerInstance.PlayerHp,_inGameManagerInstance.PlayerHp);
         GameStateChanged(_inGameManagerInstance.GameState);
     }
 
@@ -116,9 +117,9 @@ public class InGameDebug : MonoBehaviour
         _floorCount.text = "Stage " + currentStage.ToString();
     }
 
-    void PlayerHpChanged(int playerHp)
+    void PlayerHpChanged(int playerHp, int playerMaxHp)
     {
-        _playerHp.text = "Player HP: " + playerHp.ToString();
+        _playerHp.text = "Player HP: " + playerHp + "/" + playerMaxHp;
     }
 
     void GameStateChanged(GameState gameState)

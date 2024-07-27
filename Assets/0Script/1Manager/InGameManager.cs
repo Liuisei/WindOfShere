@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+
 /// <summary>
 /// インゲームマネージャーは インゲーム 全体の管理者です。
 /// プレイヤーのが行った操作がここに流れて、ゲームの状態が変化します。
@@ -11,7 +12,7 @@ using UnityEngine;
 public class InGameManager : MonoBehaviour
 {
     public static InGameManager Instance { get; private set; }
-    
+
     [SerializeField] private List<GameObject> _timeline; // タイムラインのリスト
     [SerializeField] private List<int> _characters;      // Partyキャラクターのリスト
     [SerializeField] private List<string> _stageEnemies; // ステージの敵のリスト
@@ -24,7 +25,7 @@ public class InGameManager : MonoBehaviour
     [SerializeField] private int _playerHp;              // プレイヤーのHP合計
     [SerializeField] private int _playerMaxHp;           // プレイヤーの最大HP
     [SerializeField] private GameState _gameState;       // ゲームの状態
-    
+
     ////// Action //////
 
     public event Action<List<GameObject>> OnTimelineChanged;
@@ -36,12 +37,10 @@ public class InGameManager : MonoBehaviour
     public event Action<int> OnMaxWindSpeedChanged;
     public event Action<List<int>> OnWindSpeedChanged;
     public event Action<int> OnCurrentStageChanged;
-    public event Action<int> OnPlayerHpChanged;
-    public event Action<int> OnPlayerMaxHpChanged;
+    public event Action<int, int> OnPlayerHpChanged;
     public event Action<GameState> OnGameStateChanged;
 
     ////// property //////
-    
 
     public List<GameObject> Timeline
     {
@@ -139,7 +138,7 @@ public class InGameManager : MonoBehaviour
         set
         {
             _playerHp = value;
-            OnPlayerHpChanged?.Invoke(_playerHp);
+            OnPlayerHpChanged?.Invoke(_playerHp, _playerMaxHp);
         }
     }
 
@@ -149,7 +148,7 @@ public class InGameManager : MonoBehaviour
         set
         {
             _playerMaxHp = value;
-            OnPlayerMaxHpChanged?.Invoke(_playerMaxHp);
+            OnPlayerHpChanged?.Invoke(_playerHp, _playerMaxHp);
         }
     }
 
@@ -223,16 +222,19 @@ public class InGameManager : MonoBehaviour
         Debug.Log("WindSet");
         GameState = GameState.WindSet;
     }
+
     public void PlayerHpSet()
     {
         Debug.Log("PlayerHpSet");
         GameState = GameState.PlayerHpSet;
     }
+
     public void EnemyAction()
     {
         Debug.Log("EnemyAction");
         GameState = GameState.EnemyAction;
     }
+
     public void PlayerAction()
     {
         Debug.Log("PlayerAction");
@@ -251,7 +253,7 @@ public class InGameManager : MonoBehaviour
         GameState = GameState.Result;
     }
 
-    public void PlayerHPChaged(int value)
+    public void PlayerHpChanged(int value)
     {
         PlayerHp += value;
     }

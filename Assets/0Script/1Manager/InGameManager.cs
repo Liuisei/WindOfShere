@@ -13,7 +13,7 @@ public class InGameManager : MonoBehaviour
 {
     public static InGameManager Instance { get; private set; }
     
-    [SerializeField] private Nahida _nahidakari;
+    [SerializeField] public Nahida _nahidakari;
 
     [SerializeField] private List<GameObject> _timeline; // タイムラインのリスト
     [SerializeField] private List<int> _characters;      // Partyキャラクターのリスト

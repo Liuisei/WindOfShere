@@ -6,15 +6,15 @@ using UnityEngine;
 public class CharacterDataBase : ScriptableObject
 {
     //CharacterのID
-    [SerializeField] private int _characterId;
+    [SerializeField] public int _characterId;
     //Characterの名前
-    [SerializeField] private string _characterName;
+    [SerializeField] public string _characterName;
     //HP
-    [SerializeField] private int _hp;
+    [SerializeField] public int _hp;
     //攻撃
-    [SerializeField] private int _attack;
+    [SerializeField] public int _attack;
     
-    [SerializeField] private Sprite _characterIcon;
+    [SerializeField] public Sprite _characterIcon;
     //所有する技
-    [SerializeField] private List<SkillDataBase> _commandDatabasesList;
+    [SerializeField] public List<SkillDataBase> _commandDatabasesList;
 }

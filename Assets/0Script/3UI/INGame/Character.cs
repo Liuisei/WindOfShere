@@ -1,19 +1,13 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class Character : MonoBehaviour
 {
-    [SerializeField] Image characterImage;
-
-    private void Update()
+    [SerializeField] Image _characterImage;
+    public void UpdateView(int characterID)
     {
-        Debug.Log("Liu Max Baka");
-    }
-
-    public void updateView()
-    {
+        var characterData = InGameManager.Instance._nahidakari.CharacterDataBase[characterID];
+        _characterImage.sprite = characterData._characterIcon;
     }
 }

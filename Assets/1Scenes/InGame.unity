@@ -340,6 +340,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7673021541091838782, guid: 86922f89ce755d747ad419996a0715f4, type: 3}
     - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
+      propertyPath: _nahidakari
+      value: 
+      objectReference: {fileID: 11400000, guid: cc1553a162a231741ae07c02d03fb4ac, type: 2}
+    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
       propertyPath: _playerMaxHp
       value: 1000
       objectReference: {fileID: 0}
@@ -1247,6 +1251,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5289185698285352915, guid: 2c4875eb137cd694ea1e77149c462914, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5289185698285352915, guid: 2c4875eb137cd694ea1e77149c462914, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 4d7b88231fe0e8f429fe1e70b98113b2, type: 3}
     - target: {fileID: 8275605031106262606, guid: 2c4875eb137cd694ea1e77149c462914, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

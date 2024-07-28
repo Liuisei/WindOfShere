@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72ccc6df6c3f90643bf03f6b32d2fd15, type: 3}
+  m_Name: Nahida
+  m_EditorClassIdentifier: 
+  _characterDataBase:
+  - {fileID: 11400000, guid: 0de0efd8c13eb004fad45cb98aa6ae16, type: 2}
+  - {fileID: 11400000, guid: c70abffcd57578c429ad630669f106a0, type: 2}
+  - {fileID: 11400000, guid: 3d410d84e364acd428d3949443b88284, type: 2}
+  - {fileID: 11400000, guid: 88ecd3dc753bbce4b843eca7b75a386a, type: 2}
+  - {fileID: 11400000, guid: dad98ba4caab8174babb0554ec53efe3, type: 2}
+  - {fileID: 11400000, guid: c8666d87a26222245bf346c8101ec88a, type: 2}

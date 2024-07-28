@@ -13,6 +13,8 @@ public class CharacterDataBase : ScriptableObject
     [SerializeField] private int _hp;
     //攻撃
     [SerializeField] private int _attack;
+    
+    [SerializeField] private Sprite _characterIcon;
     //所有する技
     [SerializeField] private List<SkillDataBase> _commandDatabasesList;
 }

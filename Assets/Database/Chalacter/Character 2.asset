@@ -9,7 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8da4bc5d23a74be4a8839523b9054f5f, type: 3}
-  m_Name: SkillList
+  m_Script: {fileID: 11500000, guid: 57e6c728edd2e16469b3d5cae61e0171, type: 3}
+  m_Name: Character 2
   m_EditorClassIdentifier: 
+  _characterId: 2
+  _characterName: Yossi
+  _hp: 5
+  _attack: 5
+  _characterIcon: {fileID: 21300000, guid: cf319d0efefb53d4db6773cf50b2685e, type: 3}
   _commandDatabasesList: []

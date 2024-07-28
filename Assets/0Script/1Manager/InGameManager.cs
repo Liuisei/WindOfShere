@@ -12,6 +12,8 @@ using UnityEngine;
 public class InGameManager : MonoBehaviour
 {
     public static InGameManager Instance { get; private set; }
+    
+    [SerializeField] private Nahida _nahidakari;
 
     [SerializeField] private List<GameObject> _timeline; // タイムラインのリスト
     [SerializeField] private List<int> _characters;      // Partyキャラクターのリスト
@@ -226,6 +228,7 @@ public class InGameManager : MonoBehaviour
     public void PlayerHpSet()
     {
         Debug.Log("PlayerHpSet");
+        PlayerHp = _playerHp;
         GameState = GameState.PlayerHpSet;
     }
 

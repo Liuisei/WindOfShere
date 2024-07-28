@@ -9,11 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57e6c728edd2e16469b3d5cae61e0171, type: 3}
-  m_Name: New Character Data Base
+  m_Script: {fileID: 11500000, guid: 50f0e65408cbd1b46aa869be3475e0dc, type: 3}
+  m_Name: Skill 4
   m_EditorClassIdentifier: 
-  _characterId: 0
-  _characterName: OKB
-  _hp: 100
-  _attack: 10
-  _commandList: {fileID: 0}
+  _skillName: 0
+  _skillType: 0
+  _atk: 0
+  _coolTime: 0
+  _commandDatabase:
+    _skillType: 0
+    _moveTimeLine: 0
+    _windVolume: 0
+    _abilities: []
+  references:
+    version: 2
+    RefIds: []

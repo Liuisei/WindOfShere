@@ -10,17 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50f0e65408cbd1b46aa869be3475e0dc, type: 3}
-  m_Name: New Skill Data Base
+  m_Name: Skill
   m_EditorClassIdentifier: 
-  _skillName: 0
-  _skillType: 0
-  _atk: 0
-  _coolTime: 0
+  _skillName: 3
+  _skillType: 1
+  _atk: 10
+  _coolTime: 4
   _commandDatabase:
-    _skillType: 0
-    _moveTimeLine: 0
+    _skillType: 2
+    _moveTimeLine: 3
     _windVolume: 0
-    _abilities: []
+    _abilities:
+    - rid: 720949293905870848
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 720949293905870848
+      type: {class: CloneAbility, ns: , asm: Assembly-CSharp}
+      data: 

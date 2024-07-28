@@ -1,17 +1,20 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Skill")]
+[CreateAssetMenu(menuName = "Skill" , fileName = "Skill" )]
 public class SkillDataBase : ScriptableObject
 {
     //技名
-    [SerializeField,Header("技名")] private SkillName _skillName;
+    [SerializeField, Header("技名")] private SkillName _skillName;
+
     //技の種類
-    [SerializeField,Header("技の種類")] private SkillType　_skillType;
+    [SerializeField, Header("技の種類")] private SkillType _skillType;
+
     //威力
-    [SerializeField,Header("威力")] private int _atk;
+    [SerializeField, Header("威力")] private int _atk;
+
     //クールタイム
-    [SerializeField,Header("クールタイム")] private int _coolTime;
+    [SerializeField, Header("クールタイム")] private int _coolTime;
+
     //効果
-    [SerializeField,Header("技の効果")] 
-    private CommandDatabase _commandDatabase;
+    [SerializeField, Header("技の効果")] private CommandDatabase _commandDatabase;
 }

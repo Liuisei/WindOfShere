@@ -10,10 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 57e6c728edd2e16469b3d5cae61e0171, type: 3}
-  m_Name: New Character Data Base 4
+  m_Name: Character
   m_EditorClassIdentifier: 
   _characterId: 0
-  _characterName: 
-  _hp: 0
-  _attack: 0
-  _commandList: {fileID: 0}
+  _characterName: okabe
+  _hp: 10
+  _attack: 10
+  _characterIcon: {fileID: 21300000, guid: 38ba6d718e7117e4aa4cb4b519efe829, type: 3}
+  _commandDatabasesList:
+  - {fileID: 11400000, guid: 101b7aeb600de3f488597779d8e2e13b, type: 2}

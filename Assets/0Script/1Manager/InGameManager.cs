@@ -1,16 +1,20 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
+/// <summary>
+/// インゲームマネージャーは インゲーム 全体の管理者です。
+/// プレイヤーのが行った操作がここに流れて、ゲームの状態が変化します。
+/// 変数が変化したときに対応のイベントを発火させることで、登録されてる関数が呼び出されます。
+/// 関数はGUIの更新だけ
+/// </summary>
 [DefaultExecutionOrder(-100)]
 public class InGameManager : MonoBehaviour
 {
     public static InGameManager Instance { get; private set; }
+    
+    [SerializeField] public Nahida _nahidakari;
 
-    [SerializeField] private GameObject _cardPrefab;     // カードのプレハブ
-    [SerializeField] private GameObject _cardCanvas;     // プレイヤーのTimeLineCanvas
     [SerializeField] private List<GameObject> _timeline; // タイムラインのリスト
     [SerializeField] private List<int> _characters;      // Partyキャラクターのリスト
     [SerializeField] private List<string> _stageEnemies; // ステージの敵のリスト
@@ -24,7 +28,6 @@ public class InGameManager : MonoBehaviour
     [SerializeField] private int _playerMaxHp;           // プレイヤーの最大HP
     [SerializeField] private GameState _gameState;       // ゲームの状態
 
-
     ////// Action //////
 
     public event Action<List<GameObject>> OnTimelineChanged;
@@ -36,22 +39,10 @@ public class InGameManager : MonoBehaviour
     public event Action<int> OnMaxWindSpeedChanged;
     public event Action<List<int>> OnWindSpeedChanged;
     public event Action<int> OnCurrentStageChanged;
-    public event Action<int> OnPlayerHpChanged;
-    public event Action<int> OnPlayerMaxHpChanged;
+    public event Action<int, int> OnPlayerHpChanged;
     public event Action<GameState> OnGameStateChanged;
 
     ////// property //////
-    public GameObject CardPrefab
-    {
-        get => _cardPrefab;
-        set => _cardPrefab = value;
-    }
-
-    public GameObject CardCanvas
-    {
-        get => _cardCanvas;
-        set => _cardCanvas = value;
-    }
 
     public List<GameObject> Timeline
     {
@@ -149,7 +140,7 @@ public class InGameManager : MonoBehaviour
         set
         {
             _playerHp = value;
-            OnPlayerHpChanged?.Invoke(_playerHp);
+            OnPlayerHpChanged?.Invoke(_playerHp, _playerMaxHp);
         }
     }
 
@@ -159,7 +150,7 @@ public class InGameManager : MonoBehaviour
         set
         {
             _playerMaxHp = value;
-            OnPlayerMaxHpChanged?.Invoke(_playerMaxHp);
+            OnPlayerHpChanged?.Invoke(_playerHp, _playerMaxHp);
         }
     }
 
@@ -237,6 +228,7 @@ public class InGameManager : MonoBehaviour
     public void PlayerHpSet()
     {
         Debug.Log("PlayerHpSet");
+        PlayerHp = _playerHp;
         GameState = GameState.PlayerHpSet;
     }
 
@@ -262,6 +254,11 @@ public class InGameManager : MonoBehaviour
     {
         Debug.Log("Result");
         GameState = GameState.Result;
+    }
+
+    public void PlayerHpChanged(int value)
+    {
+        PlayerHp += value;
     }
 }
 

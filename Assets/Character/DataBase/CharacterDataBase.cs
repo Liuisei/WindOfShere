@@ -2,17 +2,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>CharacterのDataを管理</summary>
-[CreateAssetMenu(menuName = "CharacterList")]
+[CreateAssetMenu(menuName = "CharacterList",fileName = "Character")]
 public class CharacterDataBase : ScriptableObject
 {
     //CharacterのID
-    [SerializeField] private int _characterId;
+    [SerializeField] public int _characterId;
     //Characterの名前
-    [SerializeField] private string _characterName;
+    [SerializeField] public string _characterName;
     //HP
-    [SerializeField] private int _hp;
+    [SerializeField] public int _hp;
     //攻撃
-    [SerializeField] private int _attack;
+    [SerializeField] public int _attack;
+    
+    [SerializeField] public Sprite _characterIcon;
     //所有する技
-    [SerializeField] private CommandList _commandList;
+    [SerializeField] public List<SkillDataBase> _commandDatabasesList;
 }

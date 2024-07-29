@@ -210,6 +210,7 @@ public class InGameManager : MonoBehaviour
     public void PlayerSet()
     {
         Debug.Log("PlayerSetAnim");
+        Characters = _characters;
         GameState = GameState.PlayerSet;
     }
 

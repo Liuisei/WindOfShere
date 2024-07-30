@@ -203,7 +203,7 @@ GameObject:
   - component: {fileID: 592127018153457219}
   - component: {fileID: 8407910070806582871}
   m_Layer: 5
-  m_Name: BIngameC
+  m_Name: BIngameCharacter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -242,4 +242,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa7f8f648183fbe41ab01b25ca8bcb1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterImage: {fileID: 950773863976610581}
+  _characterImage: {fileID: 5860909575844263328}

@@ -1228,6 +1228,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 24529359}
     - target: {fileID: 3425569029694891968, guid: 2c4875eb137cd694ea1e77149c462914, type: 3}
+      propertyPath: _characterContentPrefub
+      value: 
+      objectReference: {fileID: 7313703625976121993, guid: 57f3e16986378724892eb22c73caa7b2, type: 3}
+    - target: {fileID: 3425569029694891968, guid: 2c4875eb137cd694ea1e77149c462914, type: 3}
       propertyPath: _characterHpSliderSlider
       value: 
       objectReference: {fileID: 24529361}

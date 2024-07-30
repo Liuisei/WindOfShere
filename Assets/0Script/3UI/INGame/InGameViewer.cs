@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 /// <summary>
@@ -15,7 +17,7 @@ public class InGameViewer : MonoBehaviour
     [SerializeField] GameObject _characterHpSlider;    //Slider GameObject HP
 
     [Header("Player")] [SerializeField] GameObject _characterBox; //Character box キャラの格納
-    [SerializeField] GameObject _characterContent;                //Character content キャラのコンテンツ
+    [SerializeField] GameObject _characterContentPrefub;          //Character content キャラのコンテンツ
 
     [Header("Enemy")] [SerializeField] GameObject _enemyContent; //Enemy キャラの コンテンツ
     [SerializeField] GameObject _timeLine;                       //TimeLine タイムライン
@@ -27,7 +29,8 @@ public class InGameViewer : MonoBehaviour
     {
         _inGameManagerInstance = InGameManager.Instance;
 
-        InGameManager.Instance.OnPlayerHpChanged += UpdateHpText;
+        _inGameManagerInstance.OnPlayerHpChanged += UpdateHpText;
+        _inGameManagerInstance.OnPartyCharactersChanged += UpdateCharacter;
 
         InitializePLayerUIFields();
     }
@@ -41,5 +44,21 @@ public class InGameViewer : MonoBehaviour
     {
         _characterHp.text = hp + "/" + mhp;
         _characterHpSliderSlider.value = (float)hp / mhp;
+    }
+
+    public void UpdateCharacter(List<int> characterEquip)
+    {
+        var allCharacterContent = _characterBox.GetComponentsInChildren<Transform>();
+
+        for (int i = 1; i < allCharacterContent.Length; i++)
+        {
+            Destroy(allCharacterContent[i].gameObject);
+        }
+
+        foreach (var a in characterEquip)
+        {
+            var newCharacterContent = Instantiate(_characterContentPrefub, _characterBox.transform);
+            newCharacterContent.GetComponent<Character>().UpdateView(a);
+        }
     }
 }

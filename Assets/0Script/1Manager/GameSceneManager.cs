@@ -8,7 +8,14 @@ public class GameSceneManager : MonoBehaviour
 {
     //MasterSceneで管理されているこのSceneManagerを使いゲームシーンを遷移する。
     public static GameSceneManager Instance;
-    private string _openingSceneName;
+    private string _openingSceneName = "null";
+
+    public string OpeningSceneName
+    {
+        get => _openingSceneName;
+        set => _openingSceneName = value;
+    }
+
     private void Awake()
     {
         Instance = this;
@@ -16,15 +23,21 @@ public class GameSceneManager : MonoBehaviour
 
     private void Start()
     {
-        _openingSceneName = "1Scenes/Title";
-        SceneManager.LoadScene(_openingSceneName,LoadSceneMode.Additive);
-        Debug.Log("Start");
+        if (SceneManager.sceneCount == 1)
+        {
+            OpeningSceneName = "1Scenes/Title";
+            SceneManager.LoadScene(OpeningSceneName, LoadSceneMode.Additive);
+        }
+        else
+        {
+            OpeningSceneName = SceneManager.GetSceneAt(1).name;
+        }
     }
 
     public void SceneMove(string loadSceneName)
     {
-        SceneManager.UnloadSceneAsync(_openingSceneName);
-        SceneManager.LoadScene(loadSceneName,LoadSceneMode.Additive);
-        _openingSceneName = loadSceneName;
+        SceneManager.UnloadSceneAsync(OpeningSceneName);
+        SceneManager.LoadScene(loadSceneName, LoadSceneMode.Additive);
+        OpeningSceneName = loadSceneName;
     }
 }

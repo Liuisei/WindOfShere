@@ -6,7 +6,6 @@ public class SceneMove : MonoBehaviour
 {
     public void MoveScene(string sceneName)
     {
-        Debug.Log(sceneName);
         GameSceneManager.Instance.SceneMove(sceneName);
     }
 }

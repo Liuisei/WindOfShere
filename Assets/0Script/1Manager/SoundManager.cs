@@ -1,16 +1,19 @@
 
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
 
 [DefaultExecutionOrder(-100)]
-public class SoundManager : BaseSingleton<SoundManager>
+public class SoundManager : MonoBehaviour
 {
+    public static SoundManager Instance { get; private set; }
     [SerializeField] AudioMixer _audioMixer;
     [SerializeField] AudioSource _bgmAudioSource;
     [SerializeField] AudioSource _seAudioSource;
 
-    protected override void AwakeFunction()
+    protected  void Awake()
     {
+        Instance = this;
         if (_bgmAudioSource == null) Debug.LogError("BGM AudioSource is null.");
         if (_seAudioSource == null) Debug.LogError("SE AudioSource is null.");
     }

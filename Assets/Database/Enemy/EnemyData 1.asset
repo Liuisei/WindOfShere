@@ -16,5 +16,5 @@ MonoBehaviour:
   _characterName: 
   _hp: 0
   _attack: 0
-  _characterIcon: {fileID: 0}
+  _characterIcon: {fileID: 21300000, guid: 29a3e518729403548a006a3f742138e0, type: 3}
   _commandDatabasesList: []

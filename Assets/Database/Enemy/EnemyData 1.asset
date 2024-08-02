@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 264fd8305c16c4741884b2dc1fd0dbdf, type: 3}
   m_Name: EnemyData 1
   m_EditorClassIdentifier: 
-  _characterId: 0
-  _characterName: 
-  _hp: 0
-  _attack: 0
+  _characterId: 1
+  _characterName: UNK
+  _hp: 1
+  _attack: 1
   _characterIcon: {fileID: 21300000, guid: 29a3e518729403548a006a3f742138e0, type: 3}
   _commandDatabasesList: []

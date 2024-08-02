@@ -52,9 +52,9 @@ public class InGameDebug : MonoBehaviour
         _inGameManagerInstance.OnGameStateChanged -= GameStateChanged;
     }
 
-    void TimelineChanged(List<GameObject> timeline)
+    void TimelineChanged(List<TimelineContentData> timeline)
     {
-        _timeline.text = "Timeline: " + string.Join(",", timeline.ConvertAll(t => t.name).ToArray());
+        
     }
 
     void PartyCharactersChanged(List<int> characters)

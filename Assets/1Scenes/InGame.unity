@@ -312,92 +312,12 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
-      propertyPath: _playerHp
-      value: 200
+      propertyPath: _stageEnemies.Array.data[2]
+      value: 0,2,1
       objectReference: {fileID: 0}
     - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
-      propertyPath: _cardCanvas
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
-      propertyPath: _cardPrefab
-      value: 
-      objectReference: {fileID: 7673021541091838782, guid: 86922f89ce755d747ad419996a0715f4, type: 3}
-    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
-      propertyPath: _nahidakari
-      value: 
-      objectReference: {fileID: 11400000, guid: cc1553a162a231741ae07c02d03fb4ac, type: 2}
-    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
-      propertyPath: _playerMaxHp
-      value: 1000
-      objectReference: {fileID: 0}
-    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
-      propertyPath: _currentStage
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
-      propertyPath: _maxWindSpeed
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
-      propertyPath: _timeline.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
-      propertyPath: _windSpeed.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
-      propertyPath: _characters.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
-      propertyPath: _stageEnemies.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
-      propertyPath: _windSpeed.Array.data[0]
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
-      propertyPath: _windSpeed.Array.data[1]
-      value: -2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
-      propertyPath: _characters.Array.data[0]
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
-      propertyPath: _characters.Array.data[2]
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
-      propertyPath: _characters.Array.data[3]
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
-      propertyPath: _allStageEnemies.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
-      propertyPath: _stageEnemies.Array.data[0]
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
-      propertyPath: _stageEnemies.Array.data[1]
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
-      propertyPath: _allStageEnemies.Array.data[0]
-      value: 0,0,0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
-      propertyPath: _allStageEnemies.Array.data[1]
-      value: 0,1,0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1492645506997588509, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
-      propertyPath: _allStageEnemies.Array.data[2]
-      value: 0,1,2
+      propertyPath: _stageEnemies.Array.data[3]
+      value: 2,2,2
       objectReference: {fileID: 0}
     - target: {fileID: 2869934792526921350, guid: d305d581c1fc6b148bc3443279f385d0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -950,17 +870,13 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6925683330947171583, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
-      propertyPath: m_Value
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6984047172622544679, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.000019788742
+      value: 0.0000015497208
       objectReference: {fileID: 0}
     - target: {fileID: 6984047172622544679, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.00070062716
+      value: -0.0008519594
       objectReference: {fileID: 0}
     - target: {fileID: 7030296023063100939, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1098,13 +1014,9 @@ PrefabInstance:
       propertyPath: _onClickUnityAction.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 323853515}
-    - target: {fileID: 8705214201277116542, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
-      propertyPath: m_Size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8705214201277116542, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
-      propertyPath: m_Value
-      value: 1
+    - target: {fileID: 8511187360617190904, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
+      propertyPath: _enemyCount
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8831556972489601370, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1134,10 +1046,6 @@ PrefabInstance:
       propertyPath: _onClickUnityAction.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 323853515}
-    - target: {fileID: 9191289780211575856, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
-      propertyPath: _onClickUnityAction.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: RoadEnemyFromCurrentStage
-      objectReference: {fileID: 0}
     - target: {fileID: 9222045600215220845, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

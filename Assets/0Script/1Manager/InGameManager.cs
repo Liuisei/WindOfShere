@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 /// <summary>
 /// インゲームマネージャーは インゲーム 全体の管理者です。
@@ -18,7 +19,7 @@ public class InGameManager : MonoBehaviour
     [SerializeField] public LiuCompany _liuCompany;
 
     //インゲームのデータ プレイヤーのインプットがいじれるデータ 例；ウルトスキル ステージ1に移動
-    [SerializeField] private List<GameObject> _timeline;                              // タイムラインのリスト
+    private List<TimelineContentData> _timeline;                                      // タイムラインのリスト
     [SerializeField] private List<int> _characters;                                   // Partyキャラクターのリスト
     [SerializeField] private List<string> _stageEnemies;                              // ステージの敵のリスト
     [SerializeField] private List<int> _floorEnemies;                                 // フロアの敵のリスト
@@ -36,7 +37,7 @@ public class InGameManager : MonoBehaviour
 
     ////// Action //////
 
-    public event Action<List<GameObject>> OnTimelineChanged;
+    public event Action<List<TimelineContentData>> OnTimelineChanged;
     public event Action<List<int>> OnPartyCharactersChanged;
     public event Action<List<string>> OnStageEnemiesChanged;
     public event Action<List<int>> OnFloorEnemiesChanged;
@@ -49,7 +50,7 @@ public class InGameManager : MonoBehaviour
 
     ////// property //////
 
-    public List<GameObject> Timeline
+    public List<TimelineContentData> Timeline
     {
         get => _timeline;
         set
@@ -248,6 +249,7 @@ public class InGameManager : MonoBehaviour
             Debug.LogError("road enemy index error");
             return;
         }
+
         FloorEnemies = StageEnemies[CurrentStage - 1].Split(",").Select(int.Parse).ToList();
     }
 
@@ -256,11 +258,11 @@ public class InGameManager : MonoBehaviour
         List<EnemyInGameState> enemyStateList = new List<EnemyInGameState>();
         foreach (int i in FloorEnemies)
         {
-            var tergetEnemy = _liuCompany.EnemyDataBase[i];
+            var targetEnemy = _liuCompany.EnemyDataBase[i];
             var enemyState = new EnemyInGameState();
-            enemyState.ID = tergetEnemy._characterId;
-            enemyState.MaxHP = tergetEnemy._hp;
-            enemyState.HP = tergetEnemy._hp;
+            enemyState.ID = targetEnemy._characterId;
+            enemyState.MaxHP = targetEnemy._hp;
+            enemyState.HP = targetEnemy._hp;
             enemyStateList.Add(enemyState);
         }
 
@@ -289,6 +291,52 @@ public class InGameManager : MonoBehaviour
             GameState = GameState.EnemyStateUpdate;
         }
     }
+
+    /// <summary>
+    ///  タイムラインに追加する
+    /// </summary>
+    /// <param name="type"> タイムラインの種類</param>
+    /// <param name="actorType"> キャラクターか敵か </param>
+    /// <param name="id"> キャラクターIDか敵ID </param>
+    /// <param name="hp"> HP </param>
+    public void TimeLineAdd(TimelineType type, TimelineActorType actorType, int id, int hp)
+    {
+        var timeline = new TimelineContentData();
+        timeline.Type = type;
+        timeline.ActorType = actorType;
+        timeline.ID = id;
+        timeline.HP = hp;
+        Timeline.Add(timeline);
+    }
+
+    public void SetTimeLine()
+    {
+        List<int> cs = new List<int>(Characters);
+        List<int> es = new List<int>(FloorEnemies);
+        Timeline = new List<TimelineContentData>();
+
+        // 最初のカードはキャラクターで固定
+        int firstCharacterIndex = Random.Range(0, cs.Count);
+        TimeLineAdd(TimelineType.Normal, TimelineActorType.Character, cs[firstCharacterIndex], 0);
+        cs.RemoveAt(firstCharacterIndex);
+
+        // 残りのキャラクターと敵をランダムに追加
+        while (cs.Count > 0 || es.Count > 0)
+        {
+            if (cs.Count > 0 && (es.Count == 0 || Random.Range(0, 2) == 0))
+            {
+                int characterIndex = Random.Range(0, cs.Count);
+                TimeLineAdd(TimelineType.Normal, TimelineActorType.Character, cs[characterIndex], 0);
+                cs.RemoveAt(characterIndex);
+            }
+            else if (es.Count > 0)
+            {
+                int enemyIndex = Random.Range(0, es.Count);
+                TimeLineAdd(TimelineType.Normal, TimelineActorType.Enemy, es[enemyIndex], 0);
+                es.RemoveAt(enemyIndex);
+            }
+        }
+    }
 }
 
 public enum GameState
@@ -314,4 +362,24 @@ public class EnemyInGameState
     public int ID;
     public int HP;
     public int MaxHP;
+}
+
+public class TimelineContentData
+{
+    public TimelineType Type;
+    public TimelineActorType ActorType;
+    public int ID;
+    public int HP; //0は削除判定 -1はターンを過ぎても削除しない無敵 1以上が毎ターン減る 追加カード 
+}
+
+public enum TimelineActorType
+{
+    Enemy,
+    Character,
+}
+
+public enum TimelineType
+{
+    Normal,
+    Addition,
 }

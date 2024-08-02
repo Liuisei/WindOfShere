@@ -411,7 +411,6 @@ RectTransform:
   - {fileID: 7509965862646614524}
   - {fileID: 565194405819088712}
   - {fileID: 9119934955242533602}
-  - {fileID: 4076887203204167746}
   m_Father: {fileID: 884100039411967936}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -530,8 +529,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -707}
-  m_SizeDelta: {x: -396.06, y: -1704.7081}
+  m_AnchoredPosition: {x: 0, y: -509.6038}
+  m_SizeDelta: {x: -396.06, y: -1309.9156}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1071802586648105987
 CanvasRenderer:
@@ -1179,7 +1178,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000111579895, y: 0.0006512349}
+  m_AnchoredPosition: {x: -0.000019788742, y: -0.00070062716}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1163895488886093761
@@ -1414,82 +1413,6 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6205706130280151101}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!1 &6469010344234585278
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4076887203204167746}
-  - component: {fileID: 5597945135298251655}
-  - component: {fileID: 7314656140459939355}
-  m_Layer: 5
-  m_Name: FECount
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &4076887203204167746
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6469010344234585278}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 6297700957230020382}
-  m_Father: {fileID: 1419795256712351705}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 378, y: 412.22}
-  m_SizeDelta: {x: 200.2858, y: 183.0165}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &5597945135298251655
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6469010344234585278}
-  m_CullTransparentMesh: 1
---- !u!114 &7314656140459939355
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6469010344234585278}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -1788,7 +1711,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1978547759070532765}
   m_HandleRect: {fileID: 9222045600215220845}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -1958,7 +1881,7 @@ MonoBehaviour:
   _stageEnemies: {fileID: 1668153325735173842}
   _floorEnemies: {fileID: 1702579836735752718}
   _floorEnemiesState: {fileID: 3895635366126382993}
-  _enemyCount: {fileID: 7198743006232065082}
+  _enemyCount: {fileID: 0}
   _maxWindSpeed: {fileID: 1005456745261271774}
   _windSpeed: {fileID: 3144860989390940280}
   _floorCount: {fileID: 4858020778725404038}
@@ -2351,85 +2274,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: TimeLine
---- !u!1 &8649301939141319420
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6297700957230020382}
-  - component: {fileID: 5914623015229316239}
-  - component: {fileID: 7198743006232065082}
-  m_Layer: 5
-  m_Name: FloorEnemyCount
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &6297700957230020382
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8649301939141319420}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4076887203204167746}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.00046349, y: -0.00032806}
-  m_SizeDelta: {x: 200.28, y: 183.02}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &5914623015229316239
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8649301939141319420}
-  m_CullTransparentMesh: 1
---- !u!114 &7198743006232065082
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8649301939141319420}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 30
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 3
-    m_MaxSize: 84
-    m_Alignment: 4
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: EnemyCount
 --- !u!1 &8814164198745299093
 GameObject:
   m_ObjectHideFlags: 0
@@ -2550,7 +2394,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5227398799421297539}
   m_HandleRect: {fileID: 4039347645132525358}
   m_Direction: 0
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2740,7 +2584,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1485851745108310398, guid: 4205027218f5756479e3f819adc659a8, type: 3}
       propertyPath: _onClickUnityAction.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: PlayerSet
+      value: CharacterUpdate
       objectReference: {fileID: 0}
     - target: {fileID: 1485851745108310398, guid: 4205027218f5756479e3f819adc659a8, type: 3}
       propertyPath: _onClickUnityAction.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -2983,6 +2827,10 @@ PrefabInstance:
     - target: {fileID: 592127018153457219, guid: 4205027218f5756479e3f819adc659a8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1170132237019928776, guid: 4205027218f5756479e3f819adc659a8, type: 3}
+      propertyPath: m_Text
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7313703625976121993, guid: 4205027218f5756479e3f819adc659a8, type: 3}
       propertyPath: m_Name
@@ -3347,6 +3195,12 @@ PrefabInstance:
     - target: {fileID: 592127018153457219, guid: 4205027218f5756479e3f819adc659a8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1170132237019928776, guid: 4205027218f5756479e3f819adc659a8, type: 3}
+      propertyPath: m_Text
+      value: '
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 7313703625976121993, guid: 4205027218f5756479e3f819adc659a8, type: 3}
       propertyPath: m_Name
@@ -3856,6 +3710,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1170132237019928776, guid: 4205027218f5756479e3f819adc659a8, type: 3}
+      propertyPath: m_Text
+      value: 'Enemy
+
+        State
+
+        Update'
+      objectReference: {fileID: 0}
     - target: {fileID: 7313703625976121993, guid: 4205027218f5756479e3f819adc659a8, type: 3}
       propertyPath: m_Name
       value: BDebug (14)
@@ -3972,7 +3834,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1485851745108310398, guid: 4205027218f5756479e3f819adc659a8, type: 3}
       propertyPath: _onClickUnityAction.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1485851745108310398, guid: 4205027218f5756479e3f819adc659a8, type: 3}
       propertyPath: _onClickUnityAction.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -3980,7 +3842,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1485851745108310398, guid: 4205027218f5756479e3f819adc659a8, type: 3}
       propertyPath: _onClickUnityAction.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: PlayerHpSet
+      value: PlayerHpChange
       objectReference: {fileID: 0}
     - target: {fileID: 1485851745108310398, guid: 4205027218f5756479e3f819adc659a8, type: 3}
       propertyPath: _onClickUnityAction.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -4098,7 +3960,7 @@ PrefabInstance:
 
         State
 
-        Update'
+        Load'
       objectReference: {fileID: 0}
     - target: {fileID: 1485851745108310398, guid: 4205027218f5756479e3f819adc659a8, type: 3}
       propertyPath: _onClickUnityAction.m_PersistentCalls.m_Calls.Array.size
@@ -4114,11 +3976,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1485851745108310398, guid: 4205027218f5756479e3f819adc659a8, type: 3}
       propertyPath: _onClickUnityAction.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Result
+      value: RoadEnemyState
       objectReference: {fileID: 0}
     - target: {fileID: 1485851745108310398, guid: 4205027218f5756479e3f819adc659a8, type: 3}
       propertyPath: _onClickUnityAction.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: InGameManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1485851745108310398, guid: 4205027218f5756479e3f819adc659a8, type: 3}
+      propertyPath: _onClickUnityAction.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1485851745108310398, guid: 4205027218f5756479e3f819adc659a8, type: 3}
       propertyPath: _onClickUnityAction.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -4225,6 +4091,10 @@ PrefabInstance:
     - target: {fileID: 592127018153457219, guid: 4205027218f5756479e3f819adc659a8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1170132237019928776, guid: 4205027218f5756479e3f819adc659a8, type: 3}
+      propertyPath: m_Text
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7313703625976121993, guid: 4205027218f5756479e3f819adc659a8, type: 3}
       propertyPath: m_Name
@@ -4348,7 +4218,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1485851745108310398, guid: 4205027218f5756479e3f819adc659a8, type: 3}
       propertyPath: _onClickUnityAction.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Menu
+      value: RoadEnemyFromCurrentStage
       objectReference: {fileID: 0}
     - target: {fileID: 1485851745108310398, guid: 4205027218f5756479e3f819adc659a8, type: 3}
       propertyPath: _onClickUnityAction.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName

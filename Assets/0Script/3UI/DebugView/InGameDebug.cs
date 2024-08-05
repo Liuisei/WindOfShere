@@ -54,7 +54,9 @@ public class InGameDebug : MonoBehaviour
 
     void TimelineChanged(List<TimelineContentData> timeline)
     {
-        
+        _timeline.text = "Timeline: " + string.Join("\n",
+                timeline.ConvertAll(t => t.ActorType + " : " + t.Type + " : " + t.ID + " : " + t.HP).ToArray());
+            
     }
 
     void PartyCharactersChanged(List<int> characters)

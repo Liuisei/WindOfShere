@@ -204,11 +204,7 @@ public class InGameManager : MonoBehaviour
         GameState = GameState.PlayerSet;
     }
 
-    public void TimeLineSet()
-    {
-        Debug.Log("TimeLineSet");
-        GameState = GameState.TimeLineSet;
-    }
+   
 
     public void WindSet()
     {
@@ -336,6 +332,8 @@ public class InGameManager : MonoBehaviour
                 es.RemoveAt(enemyIndex);
             }
         }
+
+        Timeline = Timeline;
     }
 }
 

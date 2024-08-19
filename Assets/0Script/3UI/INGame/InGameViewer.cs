@@ -20,8 +20,11 @@ public class InGameViewer : MonoBehaviour
     [SerializeField] GameObject _characterContentPrefub;          //Character content キャラのコンテンツ
 
     [Header("Enemy")] [SerializeField] GameObject _enemyContent; //Enemy キャラの コンテンツ
-    [SerializeField] GameObject _timeLine;                       //TimeLine タイムライン
-    [SerializeField] GameObject _timeLineContentPrefab;          //タイムラインのコンテンツのプレハブ
+    [SerializeField] GameObject _enemyContentPrefab;             //Enemy キャラのコンテンツのプレハブ
+
+
+    [Header("TimeLine")] [SerializeField] GameObject _timeLine; //TimeLine タイムライン
+    [SerializeField] GameObject _timeLineContentPrefab;         //タイムラインのコンテンツのプレハブ
 
     private InGameManager _inGameManagerInstance;
 
@@ -31,6 +34,7 @@ public class InGameViewer : MonoBehaviour
 
         _inGameManagerInstance.OnPlayerHpChanged += UpdateHpText;
         _inGameManagerInstance.OnPartyCharactersChanged += UpdateCharacter;
+        _inGameManagerInstance.OnTimelineChanged += UpdateTimeLine;
 
         InitializePLayerUIFields();
     }
@@ -46,19 +50,28 @@ public class InGameViewer : MonoBehaviour
         _characterHpSliderSlider.value = (float)hp / mhp;
     }
 
-    public void UpdateCharacter(List<int> characterEquip)
+    public void UpdateCharacter(List<int> characterEquipList)
     {
-        var allCharacterContent = _characterBox.GetComponentsInChildren<Transform>();
+        LiuTility.UpdateContentViewData<Character>(characterEquipList, _characterBox, _characterContentPrefub);
+    }
 
-        for (int i = 1; i < allCharacterContent.Length; i++)
+    public void UpdateFloorEnemyFacade(List<int> floorEnemyLsit)
+    {
+        var allEnemyContent = _enemyContent.GetComponentsInChildren<Transform>();
+
+        for (int i = 1; i < allEnemyContent.Length; i++)
         {
-            Destroy(allCharacterContent[i].gameObject);
+            Destroy(allEnemyContent[i].gameObject);
         }
 
-        foreach (var a in characterEquip)
+        foreach (var id in floorEnemyLsit)
         {
-            var newCharacterContent = Instantiate(_characterContentPrefub, _characterBox.transform);
-            newCharacterContent.GetComponent<Character>().UpdateView(a);
+            var newEnemyContent = Instantiate(_enemyContentPrefab, _enemyContent.transform);
+            newEnemyContent.GetComponent<IDataViewer>().ViewData(id);
         }
+    }
+
+    public void UpdateTimeLine(List<TimelineContentData> timelineContentData)
+    {
     }
 }

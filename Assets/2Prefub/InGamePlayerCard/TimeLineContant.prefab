@@ -235,7 +235,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8702242280124065586}
   m_Layer: 0
-  m_Name: CSlime
+  m_Name: TimeLineContant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -207,7 +207,7 @@ public class InGameManager : MonoBehaviour
 
     private void Start()
     {
-        CurrentStageChange(1, 5000);
+        CurrentStageChange(1, 3000);
         GameState = GameState.StartInGame;
     }
 
@@ -232,7 +232,7 @@ public class InGameManager : MonoBehaviour
     /// <param name="delay">1000で1秒</param>
     private async void CurrentStageChange(int floor, int delay)
     {
-        await Task.Delay(delay); // 1秒待つ
+        await Task.Delay(delay); 
         if (floor <= 0) Debug.LogError("Liu Error : 1  Out Floor Range ");
         if (floor > _stageEnemies.Count)
         {

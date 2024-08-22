@@ -1,6 +1,6 @@
 
 public interface IDataViewer 
 {
-    void ViewData(int id);
+    void ViewData<T>(T id);
 }
 

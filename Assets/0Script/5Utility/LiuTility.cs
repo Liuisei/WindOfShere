@@ -4,21 +4,25 @@ using UnityEngine;
 public static class LiuTility
 {
     /// <summary>
-    /// Updates the content view data.
+    /// コンテンツの表示データを更新します。
     /// </summary>
-    /// <param name="idList">ID</param>
-    /// <param name="contentParent"> The parent of the content view</param>
-    /// <param name="contentPrefab"> The prefab of the content view</param>
-    /// <typeparam name="T"> The type of the data viewer</typeparam>
-    public static void UpdateContentViewData(List<int> idList, GameObject contentParent, GameObject contentPrefab)
+    /// <param name="idList">更新対象のIDリスト</param>
+    /// <param name="contentParent">コンテンツの親オブジェクト</param>
+    /// <param name="contentPrefab">コンテンツのプレハブ</param>
+    /// <typeparam name="T">データビューワーの型</typeparam>
+    public static void UpdateContentViewData<T>(List<T> idList, GameObject contentParent, GameObject contentPrefab)
     {
+        // 子オブジェクトを取得して削除する（ルートオブジェクトは削除しない）
         var allContent = contentParent.GetComponentsInChildren<Transform>();
 
-        for (int i = 1; i < allContent.Length; i++)
+        // 配列の末尾から削除することでインデックスの問題を防ぐ
+        for (int i = allContent.Length - 1; i > 0; i--)
         {
+            allContent[i].SetParent(null);
             Object.Destroy(allContent[i].gameObject);
         }
 
+        // 新しいコンテンツを生成し、IDデータを設定する
         foreach (var id in idList)
         {
             var newContent = Object.Instantiate(contentPrefab, contentParent.transform);

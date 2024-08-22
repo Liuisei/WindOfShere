@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 /// <summary>
 /// InGameViewerはゲームのUIを管理するクラスです。
@@ -62,13 +63,16 @@ public class InGameViewer : MonoBehaviour
     public void UpdateTimeLine(List<TimelineContentData> timelineContentData)
     {
         LiuTility.UpdateContentViewData(timelineContentData, _timeLine, _timeLineContentPrefab);
+        ArrangeItemsInCircle();
+    }
 
-
+    private async void ArrangeItemsInCircle()
+    {
         int itemCount = _timeLine.transform.childCount;
-        Debug.Log("itemCount: " + itemCount);
-
         float angleStep = 360f / itemCount;
-        
+
+        Task[] moveTasks = new Task[itemCount];
+
         for (int i = 0; i < itemCount; i++)
         {
             float angle = i * angleStep;
@@ -76,13 +80,30 @@ public class InGameViewer : MonoBehaviour
             // 上から時計回りに配置するための座標を計算
             float y = radius * Mathf.Cos(angle * Mathf.Deg2Rad);
             float x = radius * Mathf.Sin(angle * Mathf.Deg2Rad);
-
-            Debug.Log("angle: " + angle + ", x: " + x + ", y: " + y);
-
             // 各子オブジェクトの位置を設定
             Transform child = _timeLine.transform.GetChild(i);
             RectTransform rectTransform = child.GetComponent<RectTransform>();
-            rectTransform.localPosition = new Vector3(x, y, 0);
+            moveTasks[i] = MoveCoroutineAsync(rectTransform, rectTransform.localPosition, new Vector3(x, y, 0), 10, 0.2f);
         }
+
+        // すべてのタスクが完了するのを待つ
+        await Task.WhenAll(moveTasks);
     }
+
+    private async Task MoveCoroutineAsync(RectTransform rectTransform, Vector3 startPosition, Vector3 targetPosition, int divisions, float seconds)
+    {
+        Vector3 difference = targetPosition - startPosition;
+        Vector3 step = difference / divisions;
+        float delay = seconds / divisions;
+
+        for (int i = 0; i < divisions; i++)
+        {
+            rectTransform.localPosition += step;
+            await Task.Delay((int)(delay * 1000)); // ミリ秒単位で待機
+        }
+
+        // 最終的には正確な目標位置に設定
+        rectTransform.localPosition = targetPosition;
+    }
+    
 }

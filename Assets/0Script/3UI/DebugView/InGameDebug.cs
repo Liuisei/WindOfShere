@@ -9,17 +9,17 @@ using UnityEngine.UI;
 [DefaultExecutionOrder(100)]
 public class InGameDebug : MonoBehaviour
 {
-    [SerializeField] private Text _timeline;       // タイムラインのリスト
-    [SerializeField] private Text _characters;     // Partyキャラクターのリスト
-    [SerializeField] private Text _stageEnemies;   // ステージの敵のリスト
-    [SerializeField] private Text _floorEnemies;   // フロアの敵のリスト
-    [SerializeField] private Text _floorEnemiesHp; // フロアの敵のHPのリスト
-    [SerializeField] private Text _enemyCount;     // 敵の数
-    [SerializeField] private Text _maxWindSpeed;   // 最大風速
-    [SerializeField] private Text _windSpeed;      // 現在の風速
-    [SerializeField] private Text _floorCount;     // 現在のステージ
-    [SerializeField] private Text _playerHp;       // プレイヤーのHP合計
-    [SerializeField] private Text _gameState;      // ゲームの状態
+    [SerializeField] private Text _timeline;          // タイムラインのリスト
+    [SerializeField] private Text _characters;        // Partyキャラクターのリスト
+    [SerializeField] private Text _stageEnemies;      // ステージの敵のリスト
+    [SerializeField] private Text _floorEnemies;      // フロアの敵のリスト
+    [SerializeField] private Text _floorEnemiesState; // フロアの敵のstateのリスト
+    [SerializeField] private Text _enemyCount;        // 敵の数
+    [SerializeField] private Text _maxWindSpeed;      // 最大風速
+    [SerializeField] private Text _windSpeed;         // 現在の風速
+    [SerializeField] private Text _floorCount;        // 現在のステージ
+    [SerializeField] private Text _playerHp;          // プレイヤーのHP合計
+    [SerializeField] private Text _gameState;         // ゲームの状態
 
     private InGameManager _inGameManagerInstance;
 
@@ -30,14 +30,12 @@ public class InGameDebug : MonoBehaviour
         _inGameManagerInstance.OnPartyCharactersChanged += PartyCharactersChanged;
         _inGameManagerInstance.OnStageEnemiesChanged += StageEnemiesChanged;
         _inGameManagerInstance.OnFloorEnemiesChanged += FloorEnemiesChanged;
-        _inGameManagerInstance.OnFloorEnemiesHpChanged += FloorEnemiesHpChanged;
-        _inGameManagerInstance.OnEnemyCountChanged += EnemyCountChanged;
+        _inGameManagerInstance.OnFloorEnemiesStateChanged += FloorEnemiesStateChanged;
         _inGameManagerInstance.OnMaxWindSpeedChanged += MaxWindSpeedChanged;
         _inGameManagerInstance.OnWindSpeedChanged += WindSpeedChanged;
         _inGameManagerInstance.OnCurrentStageChanged += FloorCountChanged;
         _inGameManagerInstance.OnPlayerHpChanged += PlayerHpChanged;
         _inGameManagerInstance.OnGameStateChanged += GameStateChanged;
-        InitializeTextFields();
     }
 
     private void OnDisable()
@@ -46,8 +44,7 @@ public class InGameDebug : MonoBehaviour
         _inGameManagerInstance.OnPartyCharactersChanged -= PartyCharactersChanged;
         _inGameManagerInstance.OnStageEnemiesChanged -= StageEnemiesChanged;
         _inGameManagerInstance.OnFloorEnemiesChanged -= FloorEnemiesChanged;
-        _inGameManagerInstance.OnFloorEnemiesHpChanged -= FloorEnemiesHpChanged;
-        _inGameManagerInstance.OnEnemyCountChanged -= EnemyCountChanged;
+        _inGameManagerInstance.OnFloorEnemiesStateChanged -= FloorEnemiesStateChanged;
         _inGameManagerInstance.OnMaxWindSpeedChanged -= MaxWindSpeedChanged;
         _inGameManagerInstance.OnWindSpeedChanged -= WindSpeedChanged;
         _inGameManagerInstance.OnCurrentStageChanged -= FloorCountChanged;
@@ -55,24 +52,11 @@ public class InGameDebug : MonoBehaviour
         _inGameManagerInstance.OnGameStateChanged -= GameStateChanged;
     }
 
-    private void InitializeTextFields()
+    void TimelineChanged(List<TimelineContentData> timeline)
     {
-        TimelineChanged(_inGameManagerInstance.Timeline);
-        PartyCharactersChanged(_inGameManagerInstance.Characters);
-        StageEnemiesChanged(_inGameManagerInstance.StageEnemies);
-        FloorEnemiesChanged(_inGameManagerInstance.FloorEnemies);
-        FloorEnemiesHpChanged(_inGameManagerInstance.FloorEnemiesHp);
-        EnemyCountChanged(_inGameManagerInstance.EnemyCount);
-        MaxWindSpeedChanged(_inGameManagerInstance.MaxWindSpeed);
-        WindSpeedChanged(_inGameManagerInstance.WindSpeed);
-        FloorCountChanged(_inGameManagerInstance.CurrentStage);
-        PlayerHpChanged(_inGameManagerInstance.PlayerHp,_inGameManagerInstance.PlayerHp);
-        GameStateChanged(_inGameManagerInstance.GameState);
-    }
-
-    void TimelineChanged(List<GameObject> timeline)
-    {
-        _timeline.text = "Timeline: " + string.Join(",", timeline.ConvertAll(t => t.name).ToArray());
+        _timeline.text = "Timeline: " + string.Join("\n",
+                timeline.ConvertAll(t => t.ActorType + " : " + t.Type + " : " + t.ID + " : " + t.HP).ToArray());
+            
     }
 
     void PartyCharactersChanged(List<int> characters)
@@ -90,20 +74,16 @@ public class InGameDebug : MonoBehaviour
         _floorEnemies.text = "Enemies: " + string.Join(",", floorEnemies.ConvertAll(e => e.ToString()).ToArray());
     }
 
-    void FloorEnemiesHpChanged(List<int> floorEnemiesHp)
+    void FloorEnemiesStateChanged(List<EnemyInGameState> floorEnemiesHp)
     {
-        _floorEnemiesHp.text =
-            "EnemiesHP : " + string.Join(",", floorEnemiesHp.ConvertAll(hp => hp.ToString()).ToArray());
-    }
-
-    void EnemyCountChanged(int enemyCount)
-    {
-        _enemyCount.text = "Enemy Count: " + enemyCount.ToString();
+        _floorEnemiesState.text = "Enemies State \n " +
+                                  string.Join("     ",
+                                      floorEnemiesHp.ConvertAll(state => state.ID + " : " + state.HP).ToArray());
     }
 
     void MaxWindSpeedChanged(int maxWindSpeed)
     {
-        _maxWindSpeed.text = "Max Wind Speed: " + maxWindSpeed.ToString();
+        _maxWindSpeed.text = "Max Wind Speed: " + maxWindSpeed;
     }
 
     void WindSpeedChanged(List<int> windSpeed)

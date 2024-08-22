@@ -35,6 +35,7 @@ public class InGameViewer : MonoBehaviour
         _inGameManagerInstance.OnPlayerHpChanged += UpdateHpText;
         _inGameManagerInstance.OnPartyCharactersChanged += UpdateCharacter;
         _inGameManagerInstance.OnTimelineChanged += UpdateTimeLine;
+        _inGameManagerInstance.OnFloorEnemiesChanged += UpdateFloorEnemyFacade;
 
         InitializePLayerUIFields();
     }
@@ -52,23 +53,12 @@ public class InGameViewer : MonoBehaviour
 
     public void UpdateCharacter(List<int> characterEquipList)
     {
-        LiuTility.UpdateContentViewData<Character>(characterEquipList, _characterBox, _characterContentPrefub);
+        LiuTility.UpdateContentViewData(characterEquipList, _characterBox, _characterContentPrefub);
     }
 
     public void UpdateFloorEnemyFacade(List<int> floorEnemyLsit)
     {
-        var allEnemyContent = _enemyContent.GetComponentsInChildren<Transform>();
-
-        for (int i = 1; i < allEnemyContent.Length; i++)
-        {
-            Destroy(allEnemyContent[i].gameObject);
-        }
-
-        foreach (var id in floorEnemyLsit)
-        {
-            var newEnemyContent = Instantiate(_enemyContentPrefab, _enemyContent.transform);
-            newEnemyContent.GetComponent<IDataViewer>().ViewData(id);
-        }
+        LiuTility.UpdateContentViewData(floorEnemyLsit, _enemyContent, _enemyContentPrefab);
     }
 
     public void UpdateTimeLine(List<TimelineContentData> timelineContentData)

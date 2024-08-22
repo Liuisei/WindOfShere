@@ -10,8 +10,7 @@ public static class LiuTility
     /// <param name="contentParent"> The parent of the content view</param>
     /// <param name="contentPrefab"> The prefab of the content view</param>
     /// <typeparam name="T"> The type of the data viewer</typeparam>
-    public static void UpdateContentViewData<T>(List<int> idList, GameObject contentParent, GameObject contentPrefab)
-        where T : IDataViewer
+    public static void UpdateContentViewData(List<int> idList, GameObject contentParent, GameObject contentPrefab)
     {
         var allContent = contentParent.GetComponentsInChildren<Transform>();
 
@@ -23,7 +22,7 @@ public static class LiuTility
         foreach (var id in idList)
         {
             var newContent = Object.Instantiate(contentPrefab, contentParent.transform);
-            newContent.GetComponent<T>().ViewData(id);
+            newContent.GetComponent<IDataViewer>().ViewData(id);
         }
     }
 }

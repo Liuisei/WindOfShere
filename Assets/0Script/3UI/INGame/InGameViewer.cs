@@ -34,7 +34,7 @@ public class InGameViewer : MonoBehaviour
         _inGameManagerInstance.OnPlayerHpChanged += UpdateHpText;
         _inGameManagerInstance.OnPartyCharactersChanged += UpdateCharacter;
         _inGameManagerInstance.OnTimelineChanged += UpdateTimeLine;
-        _inGameManagerInstance.OnFloorEnemiesChanged += UpdateFloorEnemyFacade;
+        _inGameManagerInstance.OnFloorEnemiesStateChanged += UpdateFloorEnemyFacade;
 
         InitializePlayerUIFields();
     }
@@ -55,7 +55,7 @@ public class InGameViewer : MonoBehaviour
         LiuTility.UpdateContentViewData(characterEquipList, _characterBox, _characterContentPrefab);
     }
 
-    public void UpdateFloorEnemyFacade(List<int> floorEnemyList)
+    public void UpdateFloorEnemyFacade(List<EnemyInGameState> floorEnemyList)
     {
         LiuTility.UpdateContentViewData(floorEnemyList, _enemyContent, _enemyContentPrefab);
     }

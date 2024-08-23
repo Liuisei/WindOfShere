@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 /// <summary>
 /// インゲームマネージャーは インゲーム 全体の管理者です。
 /// プレイヤーのが行った操作がここに流れて、ゲームの状態が変化します。
-/// 変数が変化したときに対応のイベントを発火させることで、登録されてる関数が呼び出されます。
+/// 変数が変化したときに対応のイベントを発火させることで、登録されてる関数が呼び出されます。イベント駆動型プログラミング。
 /// ゲーム内容の処理は全部ここに書来ます。
 /// ほかのゲームOBJの状態変化は必要に応じてACTIONに登録しておき、ここでイベントを発火させます。
 /// </summary>
@@ -172,13 +172,6 @@ public class InGameManager : MonoBehaviour
             OnPlayerHpChanged?.Invoke(_playerHp, _playerMaxHp);
         }
     }
-
-    public void asss()
-    {
-        _playerMaxHp = 100;
-        PlayerMaxHp = 100;
-    }
-
     public GameState GameState
     {
         get => _gameState;
@@ -268,7 +261,6 @@ public class InGameManager : MonoBehaviour
             enemyState.MaxHP = targetEnemy._hp;
             enemyState.HP = targetEnemy._hp;
             enemyStateList.Add(enemyState);
-            
         }
 
         FloorEnemiesState = enemyStateList;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -52,6 +53,7 @@ public class InGameManager : MonoBehaviour
     public event Action<int> OnCurrentStageChanged;
     public event Action<int, int> OnPlayerHpChanged;
     public event Action<GameState> OnGameStateChanged;
+    public event Action<int> OnTimeLineMove; 
 
     #endregion
 
@@ -172,6 +174,7 @@ public class InGameManager : MonoBehaviour
             OnPlayerHpChanged?.Invoke(_playerHp, _playerMaxHp);
         }
     }
+
     public GameState GameState
     {
         get => _gameState;
@@ -200,7 +203,8 @@ public class InGameManager : MonoBehaviour
 
     private void Start()
     {
-        CurrentStageChange(1, 3000);
+        var ct = _cts.Token;
+        CurrentStageChange(1, 3000, ct);
         GameState = GameState.StartInGame;
     }
 
@@ -211,6 +215,7 @@ public class InGameManager : MonoBehaviour
     {
         if (gameState == GameState.StartInGame)
         {
+            
         }
     }
 
@@ -223,9 +228,9 @@ public class InGameManager : MonoBehaviour
     /// </summary>
     /// <param name="floor">フロア階層</param>
     /// <param name="delay">1000で1秒</param>
-    private async void CurrentStageChange(int floor, int delay)
+    private async void CurrentStageChange(int floor, int delay ,CancellationToken ct )
     {
-        await Task.Delay(delay); 
+        await Task.Delay(delay, ct);
         if (floor <= 0) Debug.LogError("Liu Error : 1  Out Floor Range ");
         if (floor > _stageEnemies.Count)
         {
@@ -240,6 +245,12 @@ public class InGameManager : MonoBehaviour
         PlayerCharactersChange(Characters);
         SetTimeLineFloorFirst();
         StageEnemyChange(StageEnemies);
+    }
+
+    CancellationTokenSource _cts = new CancellationTokenSource();
+    private void OnDestroy()
+    {
+        _cts.Cancel();
     }
 
     public void RoadEnemyFromCurrentStage()
@@ -341,6 +352,20 @@ public class InGameManager : MonoBehaviour
 
         Timeline = Timeline;
     }
+
+    #region Skill
+
+    public void HPChange(int index, int value)
+    {
+        _floorEnemiesState[index].HP += value;
+    }
+
+    public void MoveTimeline(int value)
+    {
+        OnTimeLineMove?.Invoke(value);
+    }
+
+    #endregion
 
     #endregion
 

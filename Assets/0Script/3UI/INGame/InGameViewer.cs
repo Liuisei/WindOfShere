@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -35,6 +36,7 @@ public class InGameViewer : MonoBehaviour
         _inGameManagerInstance.OnPartyCharactersChanged += UpdateCharacter;
         _inGameManagerInstance.OnTimelineChanged += UpdateTimeLine;
         _inGameManagerInstance.OnFloorEnemiesStateChanged += UpdateFloorEnemyFacade;
+        _inGameManagerInstance.OnTimeLineMove += MoveTimeLine;
 
         InitializePlayerUIFields();
     }
@@ -63,19 +65,53 @@ public class InGameViewer : MonoBehaviour
     public void UpdateTimeLine(List<TimelineContentData> timelineContentData)
     {
         LiuTility.UpdateContentViewData(timelineContentData, _timeLine, _timeLineContentPrefab);
-        ArrangeItemsInCircle();
+        ArrangeItemsInCircle(0, false);
     }
 
-    private async void ArrangeItemsInCircle()
+    private bool _isMovingTimeline;
+
+    public async void MoveTimeLine(int value)
     {
         int itemCount = _timeLine.transform.childCount;
         float angleStep = 360f / itemCount;
+
+        if (value > 0)
+        {
+            //時計回り
+            for (int i = 1; i <= value; i++)
+            {
+                await ArrangeItemsInCircle(angleStep * i);
+            }
+
+            LiuTility.ShiftList(InGameManager.Instance.Timeline, value);
+            InGameManager.Instance.Timeline = InGameManager.Instance.Timeline;
+        }
+        else if (value < 0)
+        {
+            //反時計回り
+            value = Math.Abs(value);
+            for (int i = 1; i <= value; i++)
+            {
+                await ArrangeItemsInCircle(angleStep * -i);
+            }
+
+            LiuTility.ShiftList(InGameManager.Instance.Timeline, -value);
+            InGameManager.Instance.Timeline = InGameManager.Instance.Timeline;
+        }
+    }
+
+    private async Task ArrangeItemsInCircle(float value, bool complement = true)
+    {
+        int itemCount = _timeLine.transform.childCount;
+        float angleStep = 360f / itemCount;
+
 
         Task[] moveTasks = new Task[itemCount];
 
         for (int i = 0; i < itemCount; i++)
         {
             float angle = i * angleStep;
+            angle += value;
 
             // 上から時計回りに配置するための座標を計算
             float y = radius * Mathf.Cos(angle * Mathf.Deg2Rad);
@@ -83,18 +119,29 @@ public class InGameViewer : MonoBehaviour
             // 各子オブジェクトの位置を設定
             Transform child = _timeLine.transform.GetChild(i);
             RectTransform rectTransform = child.GetComponent<RectTransform>();
-            moveTasks[i] = MoveCoroutineAsync(rectTransform, rectTransform.localPosition, new Vector3(x, y, 0), 10, 0.2f);
+            if (complement)
+            {
+                moveTasks[i] =
+                    MoveComplement(rectTransform, rectTransform.localPosition, new Vector3(x, y, 0), 10, 0.2f);
+            }
+            else
+            {
+                rectTransform.localPosition = new Vector3(x, y, 0);
+            }
         }
 
+        if (moveTasks.Length == 0) return;
         // すべてのタスクが完了するのを待つ
         await Task.WhenAll(moveTasks);
     }
 
-    private async Task MoveCoroutineAsync(RectTransform rectTransform, Vector3 startPosition, Vector3 targetPosition, int divisions, float seconds)
+    private async Task MoveComplement(RectTransform rectTransform, Vector3 startPosition, Vector3 targetPosition,
+        int divisions, float seconds)
     {
         Vector3 difference = targetPosition - startPosition;
         Vector3 step = difference / divisions;
         float delay = seconds / divisions;
+
 
         for (int i = 0; i < divisions; i++)
         {
@@ -105,5 +152,4 @@ public class InGameViewer : MonoBehaviour
         // 最終的には正確な目標位置に設定
         rectTransform.localPosition = targetPosition;
     }
-    
 }

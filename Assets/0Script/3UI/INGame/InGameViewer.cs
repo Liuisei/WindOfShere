@@ -72,6 +72,9 @@ public class InGameViewer : MonoBehaviour
 
     public async void MoveTimeLine(int value)
     {
+        if (_isMovingTimeline) return;
+        _isMovingTimeline = true;
+        
         int itemCount = _timeLine.transform.childCount;
         float angleStep = 360f / itemCount;
 
@@ -98,6 +101,9 @@ public class InGameViewer : MonoBehaviour
             LiuTility.ShiftList(InGameManager.Instance.Timeline, -value);
             InGameManager.Instance.Timeline = InGameManager.Instance.Timeline;
         }
+        
+        
+        _isMovingTimeline = false;
     }
 
     private async Task ArrangeItemsInCircle(float value, bool complement = true)

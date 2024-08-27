@@ -1,25 +1,29 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 /// <summary>
-/// InGameViewer is a class that manages the UI of the game.
-/// 表示用のUIを管理するクラスです。
-/// ここでは observer でUIの変化をします
-/// 入力は受け付けません
+/// InGameViewerはゲームのUIを管理するクラスです。
+/// このクラスでは、Observerパターンを使ってUIの変化を管理します。
+/// ユーザーからの入力は受け付けません。
 /// </summary>
 [DefaultExecutionOrder(100)]
 public class InGameViewer : MonoBehaviour
 {
-    [Header("HP")] [SerializeField] Text _characterHp; //Text of character HP
-    [SerializeField] Slider _characterHpSliderSlider;  //Slider of character HP
-    [SerializeField] GameObject _characterHpSlider;    //Slider GameObject HP
+    [Header("HP")] [SerializeField] private Text _characterHp; // キャラクターのHP表示用テキスト
+    [SerializeField] private Slider _characterHpSlider;        // キャラクターのHPスライダー
+    [SerializeField] private GameObject _characterHpSliderObj; // HPスライダーのゲームオブジェクト
 
-    [Header("Player")] [SerializeField] GameObject _characterBox; //Character box キャラの格納
-    [SerializeField] GameObject _characterContent;                //Character content キャラのコンテンツ
+    [Header("Player")] [SerializeField] private GameObject _characterBox; // プレイヤーキャラクターを格納するボックス
+    [SerializeField] private GameObject _characterContentPrefab;          // プレイヤーキャラクターのコンテンツプレハブ
 
-    [Header("Enemy")] [SerializeField] GameObject _enemyContent; //Enemy キャラの コンテンツ
-    [SerializeField] GameObject _timeLine;                       //TimeLine タイムライン
-    [SerializeField] GameObject _timeLineContentPrefab;          //タイムラインのコンテンツのプレハブ
+    [Header("Enemy")] [SerializeField] private GameObject _enemyContent; // 敵キャラクターのコンテンツ
+    [SerializeField] private GameObject _enemyContentPrefab;             // 敵キャラクターのコンテンツプレハブ
+
+    [Header("TimeLine")] [SerializeField] private GameObject _timeLine; // タイムライン
+    [SerializeField] private GameObject _timeLineContentPrefab;         // タイムラインコンテンツのプレハブ
+    [SerializeField] private float radius = 100f;                       // 円形に配置するための半径
 
     private InGameManager _inGameManagerInstance;
 
@@ -27,19 +31,79 @@ public class InGameViewer : MonoBehaviour
     {
         _inGameManagerInstance = InGameManager.Instance;
 
-        InGameManager.Instance.OnPlayerHpChanged += UpdateHpText;
+        _inGameManagerInstance.OnPlayerHpChanged += UpdateHpText;
+        _inGameManagerInstance.OnPartyCharactersChanged += UpdateCharacter;
+        _inGameManagerInstance.OnTimelineChanged += UpdateTimeLine;
+        _inGameManagerInstance.OnFloorEnemiesChanged += UpdateFloorEnemyFacade;
 
-        InitializePLayerUIFields();
+        InitializePlayerUIFields();
     }
 
-    private void InitializePLayerUIFields()
+    private void InitializePlayerUIFields()
     {
         UpdateHpText(_inGameManagerInstance.PlayerHp, _inGameManagerInstance.PlayerMaxHp);
     }
 
-    private void UpdateHpText(int hp, int mhp)
+    private void UpdateHpText(int hp, int maxHp)
     {
-        _characterHp.text = hp + "/" + mhp;
-        _characterHpSliderSlider.value = (float)hp / mhp;
+        _characterHp.text = $"{hp}/{maxHp}";
+        _characterHpSlider.value = (float)hp / maxHp;
     }
+
+    public void UpdateCharacter(List<int> characterEquipList)
+    {
+        LiuTility.UpdateContentViewData(characterEquipList, _characterBox, _characterContentPrefab);
+    }
+
+    public void UpdateFloorEnemyFacade(List<int> floorEnemyList)
+    {
+        LiuTility.UpdateContentViewData(floorEnemyList, _enemyContent, _enemyContentPrefab);
+    }
+
+    public void UpdateTimeLine(List<TimelineContentData> timelineContentData)
+    {
+        LiuTility.UpdateContentViewData(timelineContentData, _timeLine, _timeLineContentPrefab);
+        ArrangeItemsInCircle();
+    }
+
+    private async void ArrangeItemsInCircle()
+    {
+        int itemCount = _timeLine.transform.childCount;
+        float angleStep = 360f / itemCount;
+
+        Task[] moveTasks = new Task[itemCount];
+
+        for (int i = 0; i < itemCount; i++)
+        {
+            float angle = i * angleStep;
+
+            // 上から時計回りに配置するための座標を計算
+            float y = radius * Mathf.Cos(angle * Mathf.Deg2Rad);
+            float x = radius * Mathf.Sin(angle * Mathf.Deg2Rad);
+            // 各子オブジェクトの位置を設定
+            Transform child = _timeLine.transform.GetChild(i);
+            RectTransform rectTransform = child.GetComponent<RectTransform>();
+            moveTasks[i] = MoveCoroutineAsync(rectTransform, rectTransform.localPosition, new Vector3(x, y, 0), 10, 0.2f);
+        }
+
+        // すべてのタスクが完了するのを待つ
+        await Task.WhenAll(moveTasks);
+    }
+
+    private async Task MoveCoroutineAsync(RectTransform rectTransform, Vector3 startPosition, Vector3 targetPosition, int divisions, float seconds)
+    {
+        Vector3 difference = targetPosition - startPosition;
+        Vector3 step = difference / divisions;
+        float delay = seconds / divisions;
+
+        for (int i = 0; i < divisions; i++)
+        {
+            rectTransform.localPosition += step;
+            await Task.Delay((int)(delay * 1000)); // ミリ秒単位で待機
+        }
+
+        // 最終的には正確な目標位置に設定
+        rectTransform.localPosition = targetPosition;
+    }
+    
 }

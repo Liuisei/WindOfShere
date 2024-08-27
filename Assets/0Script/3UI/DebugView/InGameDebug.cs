@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,63 +22,63 @@ public class InGameDebug : MonoBehaviour
     [SerializeField] private Text _gameState;         // ゲームの状態
 
     private InGameManager _inGameManagerInstance;
+    private CompositeDisposable _disposables = new CompositeDisposable();
 
     private void OnEnable()
     {
         _inGameManagerInstance = InGameManager.Instance;
-        _inGameManagerInstance.OnTimelineChanged += TimelineChanged;
-        _inGameManagerInstance.OnPartyCharactersChanged += PartyCharactersChanged;
-        _inGameManagerInstance.OnStageEnemiesChanged += StageEnemiesChanged;
-        _inGameManagerInstance.OnFloorEnemiesChanged += FloorEnemiesChanged;
-        _inGameManagerInstance.OnFloorEnemiesStateChanged += FloorEnemiesStateChanged;
-        _inGameManagerInstance.OnMaxWindSpeedChanged += MaxWindSpeedChanged;
-        _inGameManagerInstance.OnWindSpeedChanged += WindSpeedChanged;
-        _inGameManagerInstance.OnCurrentStageChanged += FloorCountChanged;
-        _inGameManagerInstance.OnPlayerHpChanged += PlayerHpChanged;
-        _inGameManagerInstance.OnGameStateChanged += GameStateChanged;
+
+        _disposables.Add(
+            _inGameManagerInstance.PlayerHp.Subscribe(hp => PlayerHpChanged(hp, _inGameManagerInstance.PlayerMaxHp.Value))
+        );
+        _disposables.Add(
+            _inGameManagerInstance.Characters.Subscribe(UpdateCharacter)
+        );
+        _disposables.Add(
+            _inGameManagerInstance.Timeline.Subscribe(UpdateTimeLine)
+        );
+        _disposables.Add(
+            _inGameManagerInstance.FloorEnemiesState.Subscribe(UpdateFloorEnemyFacade)
+        );
+        _disposables.Add(
+            _inGameManagerInstance.Timeline.Subscribe(TimelineChanged)
+        );
+
+        InitializePlayerUIFields();
     }
 
     private void OnDisable()
     {
-        _inGameManagerInstance.OnTimelineChanged -= TimelineChanged;
-        _inGameManagerInstance.OnPartyCharactersChanged -= PartyCharactersChanged;
-        _inGameManagerInstance.OnStageEnemiesChanged -= StageEnemiesChanged;
-        _inGameManagerInstance.OnFloorEnemiesChanged -= FloorEnemiesChanged;
-        _inGameManagerInstance.OnFloorEnemiesStateChanged -= FloorEnemiesStateChanged;
-        _inGameManagerInstance.OnMaxWindSpeedChanged -= MaxWindSpeedChanged;
-        _inGameManagerInstance.OnWindSpeedChanged -= WindSpeedChanged;
-        _inGameManagerInstance.OnCurrentStageChanged -= FloorCountChanged;
-        _inGameManagerInstance.OnPlayerHpChanged -= PlayerHpChanged;
-        _inGameManagerInstance.OnGameStateChanged -= GameStateChanged;
+        _disposables.Dispose();
     }
 
-    void TimelineChanged(List<TimelineContentData> timeline)
+    void TimelineChanged(IReadOnlyReactiveProperty<TimelineContentData> timeline)
     {
         _timeline.text = "Timeline: " + string.Join("\n",
-                timeline.ConvertAll(t => t.ActorType + " : " + t.Type + " : " + t.ID + " : " + t.HP).ToArray());
-            
+            timeline.Select(t => t.ActorType + " : " + t.Type + " : " + t.ID + " : " + t.HP).ToArray());
     }
 
-    void PartyCharactersChanged(List<int> characters)
+    void PartyCharactersChanged(IReadOnlyReactiveProperty<int> characters)
     {
-        _characters.text = "Party Characters: " + string.Join(",", characters.ConvertAll(c => c.ToString()).ToArray());
+        _characters.text = "Party Characters: " +
+                           string.Join(",", characters.ToList().Select(c => c.ToString()).ToArray());
     }
 
-    void StageEnemiesChanged(List<string> stageEnemies)
+    void StageEnemiesChanged(IReadOnlyReactiveProperty<string> stageEnemies)
     {
-        _stageEnemies.text = "Stage Enemies: " + string.Join("\n", stageEnemies.ToArray());
+        _stageEnemies.text = "Stage Enemies: " + string.Join("\n", stageEnemies.ToList().ToArray());
     }
 
-    void FloorEnemiesChanged(List<int> floorEnemies)
+    void FloorEnemiesChanged(IReactiveProperty<int> floorEnemies)
     {
-        _floorEnemies.text = "Enemies: " + string.Join(",", floorEnemies.ConvertAll(e => e.ToString()).ToArray());
+        _floorEnemies.text = "Enemies: " + string.Join(",", floorEnemies.ToList().Select(e => e.ToString()).ToArray());
     }
 
-    void FloorEnemiesStateChanged(List<EnemyInGameState> floorEnemiesHp)
+    void FloorEnemiesStateChanged(IReadOnlyReactiveProperty<EnemyInGameState> floorEnemiesHp)
     {
         _floorEnemiesState.text = "Enemies State \n " +
                                   string.Join("     ",
-                                      floorEnemiesHp.ConvertAll(state => state.ID + " : " + state.HP).ToArray());
+                                      floorEnemiesHp.ToList().Select(state => state.ID + " : " + state.HP).ToArray());
     }
 
     void MaxWindSpeedChanged(int maxWindSpeed)
@@ -86,10 +86,10 @@ public class InGameDebug : MonoBehaviour
         _maxWindSpeed.text = "Max Wind Speed: " + maxWindSpeed;
     }
 
-    void WindSpeedChanged(List<int> windSpeed)
+    void WindSpeedChanged(IReadOnlyReactiveProperty<int> windSpeed)
     {
-        _windSpeed.text = " Current Wind Speed: " +
-                          string.Join("\n", windSpeed.ConvertAll(s => s.ToString()).ToArray());
+        _windSpeed.text = "Current Wind Speed: " +
+                          string.Join("\n", windSpeed.ToList().Select(s => s.ToString()).ToArray());
     }
 
     void FloorCountChanged(int currentStage)
@@ -102,7 +102,7 @@ public class InGameDebug : MonoBehaviour
         _playerHp.text = "Player HP: " + playerHp + "/" + playerMaxHp;
     }
 
-    void GameStateChanged(GameState gameState)
+    void GameStateChanged(InGameState gameState)
     {
         _gameState.text = "Game State: " + gameState;
     }

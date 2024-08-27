@@ -10,6 +10,7 @@ public class DeckManager : MonoBehaviour
     private static DeckManager _instance;
     private List<int> _deck = new List<int>(3);
     private Dictionary<int, GameObject> _cardIdToCard = new Dictionary<int, GameObject>();
+    private Camera _cam;
     private int _draggingCardId = -1;
     private int _exitingCardId = -1;
 
@@ -44,6 +45,7 @@ public class DeckManager : MonoBehaviour
     private void Awake()
     {
         _instance = this;
+        _cam = Camera.main;
     }
 
     void Start()
@@ -62,7 +64,9 @@ public class DeckManager : MonoBehaviour
 
     void Update()
     {
-        cursor.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        // cursor.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        // cursor.transform.position = new Vector3(cursor.transform.position.x, cursor.transform.position.y, 0);
+        cursor.GetComponent<RectTransform>().position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
     }
 
     public void ChangeCardList(int cardId0)

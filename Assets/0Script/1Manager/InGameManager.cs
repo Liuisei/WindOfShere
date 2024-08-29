@@ -21,8 +21,8 @@ public class InGameManager : MonoBehaviour
 
     public static InGameManager Instance { get; private set; }
 
-    [SerializeField] public Nahida _nahidakari;     // プレイヤーのDataBase
-    [SerializeField] public LiuCompany _liuCompany; // 敵のDataBase
+    [SerializeField] public Nahida _nahidakari;          // プレイヤーのDataBase
+    [SerializeField] public LiuCompany _liuCompany;      // 敵のDataBase
     [SerializeField] private List<int> _characters;      // Partyキャラクターのリスト
     [SerializeField] private List<string> _stageEnemies; // ステージの敵のリスト
     [SerializeField] private List<int> _floorEnemies;    // フロアの敵のリスト
@@ -38,12 +38,13 @@ public class InGameManager : MonoBehaviour
 
     [FormerlySerializedAs("_gameState")] [SerializeField]
     private InGameState _inGameState; // ゲームの状態
-    
+
     private CancellationTokenSource _cts = new CancellationTokenSource();
 
     #endregion
 
     #region Action
+
     public event Action<List<TimelineContentData>> OnTimelineChanged;
     public event Action<List<int>> OnPartyCharactersChanged;
     public event Action<List<string>> OnStageEnemiesChanged;
@@ -74,60 +75,105 @@ public class InGameManager : MonoBehaviour
     #endregion
 
     #region property
-
+    
     private List<TimelineContentData> Timeline
     {
-        set => SetProperty(ref _timeline, value, OnTimelineChanged);
+        set
+        {
+            _timeline = value;
+            OnTimelineChanged?.Invoke(value);    
+        }
     }
 
+    
     private List<int> Characters
     {
-        set => SetProperty(ref _characters, value, OnPartyCharactersChanged);
+        set
+        {
+            _characters = value;
+            OnPartyCharactersChanged?.Invoke(value);
+        }
     }
 
     private List<string> StageEnemies
     {
-        set => SetProperty(ref _stageEnemies, value, OnStageEnemiesChanged);
+        set
+        {
+            _stageEnemies = value;
+            OnStageEnemiesChanged?.Invoke(value);
+        }
     }
 
     private List<int> FloorEnemies
     {
-        set => SetProperty(ref _floorEnemies, value, OnFloorEnemiesChanged);
+        set
+        {
+            _floorEnemies = value;
+            OnFloorEnemiesChanged?.Invoke(value);
+        }
     }
 
     private List<EnemyInGameState> FloorEnemiesState
     {
-        set => SetProperty(ref _floorEnemiesState, value, OnFloorEnemiesStateChanged);
+        set
+        {
+            _floorEnemiesState = value;
+            OnFloorEnemiesStateChanged?.Invoke(value);
+        }
     }
 
     private int MaxWindSpeed
     {
-        set => SetProperty(ref _maxWindSpeed, value, OnMaxWindSpeedChanged);
+        set
+        {
+            _maxWindSpeed = value;
+            OnMaxWindSpeedChanged?.Invoke(value);
+        }
     }
 
     private List<int> WindSpeed
     {
-        set => SetProperty(ref _windSpeed, value, OnWindSpeedChanged);
+        set
+        {
+            _windSpeed = value;
+            OnWindSpeedChanged?.Invoke(value);
+        }
     }
 
     private int CurrentStage
     {
-        set => SetProperty(ref _currentStage, value, OnCurrentStageChanged);
+        set
+        {
+            _currentStage = value;
+            OnCurrentStageChanged?.Invoke(value);
+        }
     }
 
     private int PlayerHp
     {
-        set => SetProperty(ref _playerHp, value, OnPlayerHpChanged);
+        set
+        {
+            _playerHp = value;
+            OnPlayerHpChanged?.Invoke(value);
+        }
     }
 
     private int PlayerMaxHp
     {
-        set => SetProperty(ref _playerMaxHp, value, OnPlayerHpChanged);
+        set
+        {
+            _playerMaxHp = value;
+            OnPlayerMaxHpChanged?.Invoke(value);
+        }
     }
 
     private InGameState InGameState
     {
-        set => SetProperty(ref _inGameState, value, OnGameStateChanged);
+        set
+        {
+            _inGameState = value;
+            OnGameStateChanged?.Invoke(value);
+        }
     }
 
     #endregion
@@ -148,7 +194,6 @@ public class InGameManager : MonoBehaviour
 
     private void Start()
     {
-        InGameState = InGameState.InGameLoad;
         InGameLoad();
     }
 
@@ -163,15 +208,16 @@ public class InGameManager : MonoBehaviour
 
     public void InGameLoad()
     {
+        InGameState = InGameState.InGameLoad;
         var ct = _cts.Token;
-        FloorLoad(1, 3000, ct);
+        FloorLoad(1, 3, ct);
     }
 
     private async void FloorLoad(int floor, int delay, CancellationToken ct)
     {
         try
         {
-            await Task.Delay(delay, ct);
+            await Task.Delay(delay * 1000, ct);
             if (floor <= 0 || floor > _stageEnemies.Count)
             {
                 InGameClear();
@@ -197,6 +243,10 @@ public class InGameManager : MonoBehaviour
         Debug.Log("InGameClear");
     }
 
+    /// <summary>
+    ///  現在のステージの敵をロードします。
+    ///  FloorEnemies 各フロアの敵情報をロードします。
+    /// </summary>
     public void RoadEnemyFromCurrentStage()
     {
         if (_currentStage <= 0 || _currentStage > _stageEnemies.Count)
@@ -208,6 +258,10 @@ public class InGameManager : MonoBehaviour
         FloorEnemies = _stageEnemies[_currentStage - 1].Split(",").Select(int.Parse).ToList();
     }
 
+    /// <summary>
+    ///  敵のステートを初期化します。
+    /// _floorEnemiesState フロアの敵のステート情報を元に作成します。
+    /// </summary>
     public void RoadEnemyState()
     {
         var enemyStateList = _floorEnemies.Select(i =>
@@ -226,7 +280,7 @@ public class InGameManager : MonoBehaviour
 
     public void PlayerHpChange(int value)
     {
-        PlayerHp = _playerHp +value;
+        PlayerHp = _playerHp + value;
     }
 
     public void PlayerCharactersChange(List<int> characters)
@@ -307,19 +361,8 @@ public class InGameManager : MonoBehaviour
     {
         OnTimeLineMove?.Invoke(value);
     }
-
-
-    private void SetProperty<T>(ref T field, T value, Action<T> onChanged)
-    {
-        if (!EqualityComparer<T>.Default.Equals(field, value))
-        {
-            field = value;
-            onChanged?.Invoke(value);
-        }
-    }
-
     #endregion
-    
+
     /*
      public async void MoveTimeLine(int value)
     {

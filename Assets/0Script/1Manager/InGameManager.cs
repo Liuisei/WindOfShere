@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 /// <summary>
@@ -20,16 +21,13 @@ public class InGameManager : MonoBehaviour
 
     public static InGameManager Instance { get; private set; }
 
-    //仮のデータテーブルです。あとでデータベースに移動します。
-    [SerializeField] public Nahida _nahidakari;     //  プレイヤーのDataBase
+    [SerializeField] public Nahida _nahidakari;     // プレイヤーのDataBase
     [SerializeField] public LiuCompany _liuCompany; // 敵のDataBase
-
-    //インゲームのデータ プレイヤーのインプットがいじれるデータ 
-    private List<TimelineContentData> _timeline;         // タイムラインのリスト
     [SerializeField] private List<int> _characters;      // Partyキャラクターのリスト
     [SerializeField] private List<string> _stageEnemies; // ステージの敵のリスト
     [SerializeField] private List<int> _floorEnemies;    // フロアの敵のリスト
 
+    private List<TimelineContentData> _timeline;                                      // タイムラインのリスト
     private List<EnemyInGameState> _floorEnemiesState = new List<EnemyInGameState>(); // フロアの敵の Stateのリスト
 
     [SerializeField] private int _maxWindSpeed;    // 最大風速
@@ -37,12 +35,15 @@ public class InGameManager : MonoBehaviour
     [SerializeField] private int _currentStage;    // 現在のステージ
     [SerializeField] private int _playerHp;        // プレイヤーのHP合計
     [SerializeField] private int _playerMaxHp;     // プレイヤーの最大HP
-    [SerializeField] private GameState _gameState; // ゲームの状態
+
+    [FormerlySerializedAs("_gameState")] [SerializeField]
+    private InGameState _inGameState; // ゲームの状態
+    
+    private CancellationTokenSource _cts = new CancellationTokenSource();
 
     #endregion
 
     #region Action
-
     public event Action<List<TimelineContentData>> OnTimelineChanged;
     public event Action<List<int>> OnPartyCharactersChanged;
     public event Action<List<string>> OnStageEnemiesChanged;
@@ -51,9 +52,10 @@ public class InGameManager : MonoBehaviour
     public event Action<int> OnMaxWindSpeedChanged;
     public event Action<List<int>> OnWindSpeedChanged;
     public event Action<int> OnCurrentStageChanged;
-    public event Action<int, int> OnPlayerHpChanged;
-    public event Action<GameState> OnGameStateChanged;
-    public event Action<int> OnTimeLineMove; 
+    public event Action<int> OnPlayerHpChanged;
+    public event Action<int> OnPlayerMaxHpChanged;
+    public event Action<InGameState> OnGameStateChanged;
+    public event Action<int> OnTimeLineMove;
 
     #endregion
 
@@ -71,118 +73,61 @@ public class InGameManager : MonoBehaviour
 
     #endregion
 
-
     #region property
 
-    public List<TimelineContentData> Timeline
+    private List<TimelineContentData> Timeline
     {
-        get => _timeline;
-        set
-        {
-            _timeline = value;
-            OnTimelineChanged?.Invoke(_timeline);
-        }
+        set => SetProperty(ref _timeline, value, OnTimelineChanged);
     }
 
-    public List<int> Characters
+    private List<int> Characters
     {
-        get => _characters;
-        set
-        {
-            _characters = value;
-            OnPartyCharactersChanged?.Invoke(_characters);
-        }
+        set => SetProperty(ref _characters, value, OnPartyCharactersChanged);
     }
 
-    public List<string> StageEnemies
+    private List<string> StageEnemies
     {
-        get => _stageEnemies;
-        set
-        {
-            _stageEnemies = value;
-            OnStageEnemiesChanged?.Invoke(_stageEnemies);
-        }
+        set => SetProperty(ref _stageEnemies, value, OnStageEnemiesChanged);
     }
 
-    public List<int> FloorEnemies
+    private List<int> FloorEnemies
     {
-        get => _floorEnemies;
-        set
-        {
-            _floorEnemies = value;
-            OnFloorEnemiesChanged?.Invoke(_floorEnemies);
-        }
+        set => SetProperty(ref _floorEnemies, value, OnFloorEnemiesChanged);
     }
 
-    public List<EnemyInGameState> FloorEnemiesState
+    private List<EnemyInGameState> FloorEnemiesState
     {
-        get => _floorEnemiesState;
-        set
-        {
-            _floorEnemiesState = value;
-            OnFloorEnemiesStateChanged?.Invoke(_floorEnemiesState);
-        }
+        set => SetProperty(ref _floorEnemiesState, value, OnFloorEnemiesStateChanged);
     }
 
-    public int MaxWindSpeed
+    private int MaxWindSpeed
     {
-        get => _maxWindSpeed;
-        set
-        {
-            _maxWindSpeed = value;
-            OnMaxWindSpeedChanged?.Invoke(_maxWindSpeed);
-        }
+        set => SetProperty(ref _maxWindSpeed, value, OnMaxWindSpeedChanged);
     }
 
-    public List<int> WindSpeed
+    private List<int> WindSpeed
     {
-        get => _windSpeed;
-        set
-        {
-            _windSpeed = value;
-            OnWindSpeedChanged?.Invoke(_windSpeed);
-        }
+        set => SetProperty(ref _windSpeed, value, OnWindSpeedChanged);
     }
 
-    public int CurrentStage
+    private int CurrentStage
     {
-        get => _currentStage;
-        set
-        {
-            _currentStage = value;
-            Debug.Log("CurrentStageSet");
-            OnCurrentStageChanged?.Invoke(_currentStage);
-        }
+        set => SetProperty(ref _currentStage, value, OnCurrentStageChanged);
     }
 
-    public int PlayerHp
+    private int PlayerHp
     {
-        get => _playerHp;
-        set
-        {
-            _playerHp = value;
-            OnPlayerHpChanged?.Invoke(_playerHp, _playerMaxHp);
-        }
+        set => SetProperty(ref _playerHp, value, OnPlayerHpChanged);
     }
 
-    public int PlayerMaxHp
+    private int PlayerMaxHp
     {
-        get => _playerMaxHp;
-        set
-        {
-            _playerMaxHp = value;
-            OnPlayerHpChanged?.Invoke(_playerHp, _playerMaxHp);
-        }
+        set => SetProperty(ref _playerMaxHp, value, OnPlayerHpChanged);
     }
 
-    public GameState GameState
+    private InGameState InGameState
     {
-        get => _gameState;
-        private set
-        {
-            _gameState = value;
-            OnGameStateChanged?.Invoke(_gameState);
-        }
+        set => SetProperty(ref _inGameState, value, OnGameStateChanged);
     }
 
     #endregion
@@ -203,84 +148,85 @@ public class InGameManager : MonoBehaviour
 
     private void Start()
     {
+        InGameState = InGameState.InGameLoad;
+        InGameLoad();
+    }
+
+    private void GameStateUpdate(InGameState inGameState)
+    {
+        // 状態に応じた処理をここに追加する
+        if (inGameState == InGameState.InGameLoad)
+        {
+            // インゲームロードの処理
+        }
+    }
+
+    public void InGameLoad()
+    {
         var ct = _cts.Token;
-        CurrentStageChange(1, 3000, ct);
-        GameState = GameState.StartInGame;
+        FloorLoad(1, 3000, ct);
     }
 
-
-    #region GameState
-
-    private void GameStateUpdate(GameState gameState)
+    private async void FloorLoad(int floor, int delay, CancellationToken ct)
     {
-        if (gameState == GameState.StartInGame)
+        try
         {
-            
+            await Task.Delay(delay, ct);
+            if (floor <= 0 || floor > _stageEnemies.Count)
+            {
+                InGameClear();
+                return;
+            }
+
+            CurrentStage = floor;
+            RoadEnemyFromCurrentStage();
+            RoadEnemyState();
+            PlayerHpChange(0);
+            PlayerCharactersChange(_characters);
+            SetTimeLineFloorFirst();
+            StageEnemyChange(_stageEnemies);
+        }
+        catch (TaskCanceledException)
+        {
+            Debug.Log("FloorLoad task was canceled.");
         }
     }
 
-    #endregion
-
-    #region system
-
-    /// <summary>
-    ///  現在のステージを変更する
-    /// </summary>
-    /// <param name="floor">フロア階層</param>
-    /// <param name="delay">1000で1秒</param>
-    private async void CurrentStageChange(int floor, int delay ,CancellationToken ct )
+    private void InGameClear()
     {
-        await Task.Delay(delay, ct);
-        if (floor <= 0) Debug.LogError("Liu Error : 1  Out Floor Range ");
-        if (floor > _stageEnemies.Count)
-        {
-            Debug.Log("Win");
-            return;
-        }
-
-        CurrentStage = floor;
-        RoadEnemyFromCurrentStage();
-        RoadEnemyState();
-        PlayerHpChange(0);
-        PlayerCharactersChange(Characters);
-        SetTimeLineFloorFirst();
-        StageEnemyChange(StageEnemies);
-    }
-
-    CancellationTokenSource _cts = new CancellationTokenSource();
-    private void OnDestroy()
-    {
-        _cts.Cancel();
+        Debug.Log("InGameClear");
     }
 
     public void RoadEnemyFromCurrentStage()
     {
-        GameState = GameState.FloorEnemyLoad;
-        if (CurrentStage <= 0 || CurrentStage > _stageEnemies.Count) Debug.LogError("road enemy index error");
-        FloorEnemies = StageEnemies[CurrentStage - 1].Split(",").Select(int.Parse).ToList();
+        if (_currentStage <= 0 || _currentStage > _stageEnemies.Count)
+        {
+            Debug.LogError("Road enemy index error");
+            return;
+        }
+
+        FloorEnemies = _stageEnemies[_currentStage - 1].Split(",").Select(int.Parse).ToList();
     }
 
     public void RoadEnemyState()
     {
-        GameState = GameState.EnemyStateUpdate;
-        List<EnemyInGameState> enemyStateList = new List<EnemyInGameState>();
-        foreach (int i in FloorEnemies)
+        var enemyStateList = _floorEnemies.Select(i =>
         {
             var targetEnemy = _liuCompany.EnemyDataBase[i];
-            var enemyState = new EnemyInGameState();
-            enemyState.ID = targetEnemy._characterId;
-            enemyState.MaxHP = targetEnemy._hp;
-            enemyState.HP = targetEnemy._hp;
-            enemyStateList.Add(enemyState);
-        }
+            return new EnemyInGameState
+            {
+                ID = targetEnemy._characterId,
+                MaxHP = targetEnemy._hp,
+                HP = targetEnemy._hp
+            };
+        }).ToList();
 
         FloorEnemiesState = enemyStateList;
     }
 
     public void PlayerHpChange(int value)
     {
-        PlayerHp += value;
-        GameState = GameState.PlayerHpUpdate;
+        PlayerHp = _playerHp +value;
     }
 
     public void PlayerCharactersChange(List<int> characters)
@@ -288,52 +234,45 @@ public class InGameManager : MonoBehaviour
         Characters = characters;
     }
 
-    public void StageEnemyChange(List<String> stageEnemy)
+    public void StageEnemyChange(List<string> stageEnemy)
     {
         StageEnemies = stageEnemy;
     }
 
-
     public void EnemyHpChange(int index, int value)
     {
         Debug.Log("EnemyHpChange");
-        var enemy = FloorEnemiesState[index];
-        if (enemy != null)
+        if (index >= 0 && index < _floorEnemiesState.Count)
         {
-            enemy.HP += value;
-            GameState = GameState.EnemyStateUpdate;
+            _floorEnemiesState[index].HP += value;
         }
     }
 
-    /// <summary>
-    ///  タイムラインに追加する
-    /// </summary>
-    /// <param name="type"> タイムラインの種類</param>
-    /// <param name="actorType"> キャラクターか敵か </param>
-    /// <param name="id"> キャラクターIDか敵ID </param>
-    /// <param name="hp"> HP </param>
     public void TimeLineAdd(TimelineType type, TimelineActorType actorType, int id, int hp)
     {
-        var timeline = new TimelineContentData();
-        timeline.Type = type;
-        timeline.ActorType = actorType;
-        timeline.ID = id;
-        timeline.HP = hp;
-        Timeline.Add(timeline);
+        var timeline = new TimelineContentData
+        {
+            Type = type,
+            ActorType = actorType,
+            ID = id,
+            HP = hp
+        };
+        _timeline.Add(timeline);
     }
 
     public void SetTimeLineFloorFirst()
     {
-        List<int> cs = new List<int>(Characters);
-        List<int> es = new List<int>(FloorEnemies);
+        var cs = new List<int>(_characters);
+        var es = new List<int>(_floorEnemies);
         Timeline = new List<TimelineContentData>();
 
-        // 最初のカードはキャラクターで固定
-        int firstCharacterIndex = Random.Range(0, cs.Count);
-        TimeLineAdd(TimelineType.Normal, TimelineActorType.Character, cs[firstCharacterIndex], 0);
-        cs.RemoveAt(firstCharacterIndex);
+        if (cs.Count > 0)
+        {
+            int firstCharacterIndex = Random.Range(0, cs.Count);
+            TimeLineAdd(TimelineType.Normal, TimelineActorType.Character, cs[firstCharacterIndex], 0);
+            cs.RemoveAt(firstCharacterIndex);
+        }
 
-        // 残りのキャラクターと敵をランダムに追加
         while (cs.Count > 0 || es.Count > 0)
         {
             if (cs.Count > 0 && (es.Count == 0 || Random.Range(0, 2) == 0))
@@ -349,15 +288,19 @@ public class InGameManager : MonoBehaviour
                 es.RemoveAt(enemyIndex);
             }
         }
-
-        Timeline = Timeline;
     }
 
-    #region Skill
+    private void OnDestroy()
+    {
+        _cts.Cancel();
+    }
 
     public void HPChange(int index, int value)
     {
-        _floorEnemiesState[index].HP += value;
+        if (index >= 0 && index < _floorEnemiesState.Count)
+        {
+            _floorEnemiesState[index].HP += value;
+        }
     }
 
     public void MoveTimeline(int value)
@@ -365,30 +308,118 @@ public class InGameManager : MonoBehaviour
         OnTimeLineMove?.Invoke(value);
     }
 
-    #endregion
+
+    private void SetProperty<T>(ref T field, T value, Action<T> onChanged)
+    {
+        if (!EqualityComparer<T>.Default.Equals(field, value))
+        {
+            field = value;
+            onChanged?.Invoke(value);
+        }
+    }
 
     #endregion
+    
+    /*
+     public async void MoveTimeLine(int value)
+    {
+        if (_isMovingTimeline) return;
+        _isMovingTimeline = true;
 
-    #endregion
+        int itemCount = _timeLine.transform.childCount;
+        float angleStep = 360f / itemCount;
+
+        if (value > 0)
+        {
+            //時計回り
+            for (int i = 1; i <= value; i++)
+            {
+                await ArrangeItemsInCircle(angleStep * i);
+            }
+
+            LiuTility.ShiftList(InGameManager.Instance.Timeline, value);
+            //InGameManager.Instance.Timeline = InGameManager.Instance.Timeline;
+        }
+        else if (value < 0)
+        {
+            //反時計回り
+            value = Math.Abs(value);
+            for (int i = 1; i <= value; i++)
+            {
+                await ArrangeItemsInCircle(angleStep * -i);
+            }
+
+            LiuTility.ShiftList(InGameManager.Instance.Timeline, -value);
+            //InGameManager.Instance.Timeline = InGameManager.Instance.Timeline;
+        }
+
+
+        _isMovingTimeline = false;
+    }
+
+    private async Task ArrangeItemsInCircle(float value, bool complement = true)
+    {
+        int itemCount = _timeLine.transform.childCount;
+        float angleStep = 360f / itemCount;
+
+
+        Task[] moveTasks = new Task[itemCount];
+
+        for (int i = 0; i < itemCount; i++)
+        {
+            float angle = i * angleStep;
+            angle += value;
+
+            // 上から時計回りに配置するための座標を計算
+            float y = radius * Mathf.Cos(angle * Mathf.Deg2Rad);
+            float x = radius * Mathf.Sin(angle * Mathf.Deg2Rad);
+            // 各子オブジェクトの位置を設定
+            Transform child = _timeLine.transform.GetChild(i);
+            RectTransform rectTransform = child.GetComponent<RectTransform>();
+            if (complement)
+            {
+                moveTasks[i] =
+                    MoveComplement(rectTransform, rectTransform.localPosition, new Vector3(x, y, 0), 10, 0.2f);
+            }
+            else
+            {
+                rectTransform.localPosition = new Vector3(x, y, 0);
+            }
+        }
+
+        if (moveTasks.Length == 0) return;
+        // すべてのタスクが完了するのを待つ
+        await Task.WhenAll(moveTasks);
+    }
+
+    private async Task MoveComplement(RectTransform rectTransform, Vector3 startPosition, Vector3 targetPosition,
+        int divisions, float seconds)
+    {
+        Vector3 difference = targetPosition - startPosition;
+        Vector3 step = difference / divisions;
+        float delay = seconds / divisions;
+
+
+        for (int i = 0; i < divisions; i++)
+        {
+            rectTransform.localPosition += step;
+            await Task.Delay((int)(delay * 1000)); // ミリ秒単位で待機
+        }
+
+        // 最終的には正確な目標位置に設定
+        rectTransform.localPosition = targetPosition;
+    }
+    */
 }
 
-public enum GameState
+public enum InGameState
 {
-    StartInGame,
-    Movie,
-    Speaking,
-    FloorEnemyLoad, // 今の階層の 敵の数と配置は！？
-    EnemyAnim,
-    EnemyStateUpdate,
-    PlayerAnim,
-    TimeLineFirstMake,
-    TimeLineMove,
-    WindAdd,
-    PlayerHpUpdate,
-    EnemyAction,
+    InGameLoad,
+    FloorLoad,
     PlayerAction,
-    Menu,
-    Result
+    EnemyAction,
+    Animation,
+    Clear,
 }
 
 public class EnemyInGameState

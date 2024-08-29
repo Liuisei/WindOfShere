@@ -9,23 +9,33 @@ using UnityEngine.UI;
 [DefaultExecutionOrder(100)]
 public class InGameDebug : MonoBehaviour
 {
-    [SerializeField] private Text _timeline;          // タイムラインのリスト
-    [SerializeField] private Text _characters;        // Partyキャラクターのリスト
-    [SerializeField] private Text _stageEnemies;      // ステージの敵のリスト
-    [SerializeField] private Text _floorEnemies;      // フロアの敵のリスト
-    [SerializeField] private Text _floorEnemiesState; // フロアの敵のstateのリスト
-    [SerializeField] private Text _enemyCount;        // 敵の数
-    [SerializeField] private Text _maxWindSpeed;      // 最大風速
-    [SerializeField] private Text _windSpeed;         // 現在の風速
-    [SerializeField] private Text _floorCount;        // 現在のステージ
-    [SerializeField] private Text _playerHp;          // プレイヤーのHP合計
-    [SerializeField] private Text _gameState;         // ゲームの状態
+    [SerializeField] private Text _timelineText;
+    [SerializeField] private Text _charactersText;
+    [SerializeField] private Text _stageEnemiesText;
+    [SerializeField] private Text _floorEnemiesText;
+    [SerializeField] private Text _floorEnemiesStateText;
+    [SerializeField] private Text _maxWindSpeedText;
+    [SerializeField] private Text _windSpeedText;
+    [SerializeField] private Text _floorCountText;
+    [SerializeField] private Text _playerHpText;
+    [SerializeField] private Text _playerMaxHpText;
+    [SerializeField] private Text _gameStateText;
 
     private InGameManager _inGameManagerInstance;
 
     private void OnEnable()
     {
         _inGameManagerInstance = InGameManager.Instance;
+        SubscribeToEvents();
+    }
+
+    private void OnDisable()
+    {
+        UnsubscribeFromEvents();
+    }
+
+    private void SubscribeToEvents()
+    {
         _inGameManagerInstance.OnTimelineChanged += TimelineChanged;
         _inGameManagerInstance.OnPartyCharactersChanged += PartyCharactersChanged;
         _inGameManagerInstance.OnStageEnemiesChanged += StageEnemiesChanged;
@@ -35,10 +45,11 @@ public class InGameDebug : MonoBehaviour
         _inGameManagerInstance.OnWindSpeedChanged += WindSpeedChanged;
         _inGameManagerInstance.OnCurrentStageChanged += FloorCountChanged;
         _inGameManagerInstance.OnPlayerHpChanged += PlayerHpChanged;
+        _inGameManagerInstance.OnPlayerMaxHpChanged += PlayerMaxHpChanged;
         _inGameManagerInstance.OnGameStateChanged += GameStateChanged;
     }
 
-    private void OnDisable()
+    private void UnsubscribeFromEvents()
     {
         _inGameManagerInstance.OnTimelineChanged -= TimelineChanged;
         _inGameManagerInstance.OnPartyCharactersChanged -= PartyCharactersChanged;
@@ -49,61 +60,76 @@ public class InGameDebug : MonoBehaviour
         _inGameManagerInstance.OnWindSpeedChanged -= WindSpeedChanged;
         _inGameManagerInstance.OnCurrentStageChanged -= FloorCountChanged;
         _inGameManagerInstance.OnPlayerHpChanged -= PlayerHpChanged;
+        _inGameManagerInstance.OnPlayerMaxHpChanged -= PlayerMaxHpChanged;
         _inGameManagerInstance.OnGameStateChanged -= GameStateChanged;
     }
 
-    void TimelineChanged(List<TimelineContentData> timeline)
+    private void UpdateText(Text textField, string content)
     {
-        _timeline.text = "Timeline: " + string.Join("\n",
-                timeline.ConvertAll(t => t.ActorType + " : " + t.Type + " : " + t.ID + " : " + t.HP).ToArray());
-            
+        if (textField != null)
+        {
+            textField.text = content;
+        }
     }
 
-    void PartyCharactersChanged(List<int> characters)
+    private void TimelineChanged(List<TimelineContentData> timeline)
     {
-        _characters.text = "Party Characters: " + string.Join(",", characters.ConvertAll(c => c.ToString()).ToArray());
+        var timelineContent = "Timeline:\n" + string.Join("\n", timeline.ConvertAll(t => $"{t.ActorType} : {t.Type} : {t.ID} : {t.HP}"));
+        UpdateText(_timelineText, timelineContent);
     }
 
-    void StageEnemiesChanged(List<string> stageEnemies)
+    private void PartyCharactersChanged(List<int> characters)
     {
-        _stageEnemies.text = "Stage Enemies: " + string.Join("\n", stageEnemies.ToArray());
+        var charactersContent = "Party Characters: " + string.Join(", ", characters);
+        UpdateText(_charactersText, charactersContent);
     }
 
-    void FloorEnemiesChanged(List<int> floorEnemies)
+    private void StageEnemiesChanged(List<string> stageEnemies)
     {
-        _floorEnemies.text = "Enemies: " + string.Join(",", floorEnemies.ConvertAll(e => e.ToString()).ToArray());
+        var stageEnemiesContent = "Stage Enemies:\n" + string.Join("\n", stageEnemies);
+        UpdateText(_stageEnemiesText, stageEnemiesContent);
     }
 
-    void FloorEnemiesStateChanged(List<EnemyInGameState> floorEnemiesHp)
+    private void FloorEnemiesChanged(List<int> floorEnemies)
     {
-        _floorEnemiesState.text = "Enemies State \n " +
-                                  string.Join("     ",
-                                      floorEnemiesHp.ConvertAll(state => state.ID + " : " + state.HP).ToArray());
+        var floorEnemiesContent = "Enemies: " + string.Join(", ", floorEnemies);
+        UpdateText(_floorEnemiesText, floorEnemiesContent);
     }
 
-    void MaxWindSpeedChanged(int maxWindSpeed)
+    private void FloorEnemiesStateChanged(List<EnemyInGameState> floorEnemiesState)
     {
-        _maxWindSpeed.text = "Max Wind Speed: " + maxWindSpeed;
+        var stateContent = "Enemies State:\n" + string.Join("\n", floorEnemiesState.ConvertAll(state => $"{state.ID} : {state.HP}"));
+        UpdateText(_floorEnemiesStateText, stateContent);
     }
 
-    void WindSpeedChanged(List<int> windSpeed)
+    private void MaxWindSpeedChanged(int maxWindSpeed)
     {
-        _windSpeed.text = " Current Wind Speed: " +
-                          string.Join("\n", windSpeed.ConvertAll(s => s.ToString()).ToArray());
+        UpdateText(_maxWindSpeedText, $"Max Wind Speed: {maxWindSpeed}");
     }
 
-    void FloorCountChanged(int currentStage)
+    private void WindSpeedChanged(List<int> windSpeed)
     {
-        _floorCount.text = "Stage " + currentStage.ToString();
+        var windSpeedContent = "Current Wind Speed:\n" + string.Join("\n", windSpeed);
+        UpdateText(_windSpeedText, windSpeedContent);
     }
 
-    void PlayerHpChanged(int playerHp, int playerMaxHp)
+    private void FloorCountChanged(int currentStage)
     {
-        _playerHp.text = "Player HP: " + playerHp + "/" + playerMaxHp;
+        UpdateText(_floorCountText, $"Stage {currentStage}");
     }
 
-    void GameStateChanged(GameState gameState)
+    private void PlayerHpChanged(int playerHp)
     {
-        _gameState.text = "Game State: " + gameState;
+        UpdateText(_playerHpText, $"Player HP: {playerHp} /");
+    }
+
+    private void PlayerMaxHpChanged(int playerMaxHp)
+    {
+        UpdateText(_playerHpText, $"Player MHP: {playerMaxHp}");
+    }
+
+    private void GameStateChanged(InGameState inGameState)
+    {
+        UpdateText(_gameStateText, $"Game State: {inGameState}");
     }
 }

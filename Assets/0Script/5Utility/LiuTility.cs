@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -59,5 +60,22 @@ public static class LiuTility
                 list.Add(first);
             }
         }
+    }
+    
+    public static async Task MoveComplement(RectTransform rectTransform, Vector3 startPosition, Vector3 targetPosition, int divisions, float seconds)
+    {
+        Vector3 difference = targetPosition - startPosition;
+        Vector3 step = difference / divisions;
+        float delay = seconds / divisions;
+
+
+        for (int i = 0; i < divisions; i++)
+        {
+            rectTransform.localPosition += step;
+            await Task.Delay((int)(delay * 1000)); // ミリ秒単位で待機
+        }
+
+        // 最終的には正確な目標位置に設定
+        rectTransform.localPosition = targetPosition;
     }
 }

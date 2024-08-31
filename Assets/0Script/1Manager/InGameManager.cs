@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -75,17 +76,17 @@ public class InGameManager : MonoBehaviour
     #endregion
 
     #region property
-    
+
     private List<TimelineContentData> Timeline
     {
         set
         {
             _timeline = value;
-            OnTimelineChanged?.Invoke(value);    
+            OnTimelineChanged?.Invoke(value);
         }
     }
 
-    
+
     private List<int> Characters
     {
         set
@@ -213,6 +214,12 @@ public class InGameManager : MonoBehaviour
         FloorLoad(1, 3, ct);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="floor">移動先フロア</param>
+    /// <param name="delay"></param>
+    /// <param name="ct"></param>
     private async void FloorLoad(int floor, int delay, CancellationToken ct)
     {
         try
@@ -224,13 +231,16 @@ public class InGameManager : MonoBehaviour
                 return;
             }
 
+            StageEnemies = _stageEnemies;
+            PlayerHpChange(0);
+
             CurrentStage = floor;
             RoadEnemyFromCurrentStage();
             RoadEnemyState();
-            PlayerHpChange(0);
+
             PlayerCharactersChange(_characters);
             SetTimeLineFloorFirst();
-            StageEnemyChange(_stageEnemies);
+            SkillMoveTimeline(0);
         }
         catch (TaskCanceledException)
         {
@@ -288,10 +298,6 @@ public class InGameManager : MonoBehaviour
         Characters = characters;
     }
 
-    public void StageEnemyChange(List<string> stageEnemy)
-    {
-        StageEnemies = stageEnemy;
-    }
 
     public void EnemyHpChange(int index, int value)
     {
@@ -306,10 +312,10 @@ public class InGameManager : MonoBehaviour
     {
         var timeline = new TimelineContentData
         {
-            Type = type,
-            ActorType = actorType,
-            ID = id,
-            HP = hp
+            _type = type,
+            _actorType = actorType,
+            _id = id,
+            _hp = hp
         };
         _timeline.Add(timeline);
     }
@@ -342,6 +348,8 @@ public class InGameManager : MonoBehaviour
                 es.RemoveAt(enemyIndex);
             }
         }
+
+        Timeline = _timeline;
     }
 
     private void OnDestroy()
@@ -357,102 +365,14 @@ public class InGameManager : MonoBehaviour
         }
     }
 
-    public void MoveTimeline(int value)
+    public void SkillMoveTimeline(int value)
     {
         OnTimeLineMove?.Invoke(value);
+        LiuTility.ShiftList(_timeline,  value);
+        Timeline = _timeline;
     }
+
     #endregion
-
-    /*
-     public async void MoveTimeLine(int value)
-    {
-        if (_isMovingTimeline) return;
-        _isMovingTimeline = true;
-
-        int itemCount = _timeLine.transform.childCount;
-        float angleStep = 360f / itemCount;
-
-        if (value > 0)
-        {
-            //時計回り
-            for (int i = 1; i <= value; i++)
-            {
-                await ArrangeItemsInCircle(angleStep * i);
-            }
-
-            LiuTility.ShiftList(InGameManager.Instance.Timeline, value);
-            //InGameManager.Instance.Timeline = InGameManager.Instance.Timeline;
-        }
-        else if (value < 0)
-        {
-            //反時計回り
-            value = Math.Abs(value);
-            for (int i = 1; i <= value; i++)
-            {
-                await ArrangeItemsInCircle(angleStep * -i);
-            }
-
-            LiuTility.ShiftList(InGameManager.Instance.Timeline, -value);
-            //InGameManager.Instance.Timeline = InGameManager.Instance.Timeline;
-        }
-
-
-        _isMovingTimeline = false;
-    }
-
-    private async Task ArrangeItemsInCircle(float value, bool complement = true)
-    {
-        int itemCount = _timeLine.transform.childCount;
-        float angleStep = 360f / itemCount;
-
-
-        Task[] moveTasks = new Task[itemCount];
-
-        for (int i = 0; i < itemCount; i++)
-        {
-            float angle = i * angleStep;
-            angle += value;
-
-            // 上から時計回りに配置するための座標を計算
-            float y = radius * Mathf.Cos(angle * Mathf.Deg2Rad);
-            float x = radius * Mathf.Sin(angle * Mathf.Deg2Rad);
-            // 各子オブジェクトの位置を設定
-            Transform child = _timeLine.transform.GetChild(i);
-            RectTransform rectTransform = child.GetComponent<RectTransform>();
-            if (complement)
-            {
-                moveTasks[i] =
-                    MoveComplement(rectTransform, rectTransform.localPosition, new Vector3(x, y, 0), 10, 0.2f);
-            }
-            else
-            {
-                rectTransform.localPosition = new Vector3(x, y, 0);
-            }
-        }
-
-        if (moveTasks.Length == 0) return;
-        // すべてのタスクが完了するのを待つ
-        await Task.WhenAll(moveTasks);
-    }
-
-    private async Task MoveComplement(RectTransform rectTransform, Vector3 startPosition, Vector3 targetPosition,
-        int divisions, float seconds)
-    {
-        Vector3 difference = targetPosition - startPosition;
-        Vector3 step = difference / divisions;
-        float delay = seconds / divisions;
-
-
-        for (int i = 0; i < divisions; i++)
-        {
-            rectTransform.localPosition += step;
-            await Task.Delay((int)(delay * 1000)); // ミリ秒単位で待機
-        }
-
-        // 最終的には正確な目標位置に設定
-        rectTransform.localPosition = targetPosition;
-    }
-    */
 }
 
 public enum InGameState
@@ -472,12 +392,13 @@ public class EnemyInGameState
     public int MaxHP;
 }
 
+[Serializable]
 public class TimelineContentData
 {
-    public TimelineType Type;
-    public TimelineActorType ActorType;
-    public int ID;
-    public int HP; //0は削除判定 -1はターンを過ぎても削除しない無敵 1以上が毎ターン減る 追加カード 
+    public TimelineType _type;
+    public TimelineActorType _actorType;
+    public int _id;
+    public int _hp; //0は削除判定 -1はターンを過ぎても削除しない無敵 1以上が毎ターン減る 追加カード 
 }
 
 public enum TimelineActorType

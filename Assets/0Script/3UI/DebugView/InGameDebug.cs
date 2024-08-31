@@ -74,7 +74,9 @@ public class InGameDebug : MonoBehaviour
 
     private void TimelineChanged(List<TimelineContentData> timeline)
     {
-        var timelineContent = "Timeline:\n" + string.Join("\n", timeline.ConvertAll(t => $"{t.ActorType} : {t.Type} : {t.ID} : {t.HP}"));
+        var timelineContent = "Timeline:\n" + string.Join("\n", timeline.ConvertAll(t => $"{t._actorType} : {t._type} : {t._id} : {t._hp}"));
+        Debug.Log(timelineContent);
+
         UpdateText(_timelineText, timelineContent);
     }
 

@@ -10,14 +10,14 @@ public class InGameTimeLineContant : MonoBehaviour, IDataViewer
     {
         if (id is TimelineContentData timelineData)
         {
-            if (timelineData.ActorType == TimelineActorType.Character)
+            if (timelineData._actorType == TimelineActorType.Character)
             {
-                var characterData = InGameManager.Instance._nahidakari.CharacterDataBase[timelineData.ID];
+                var characterData = InGameManager.Instance._nahidakari.CharacterDataBase[timelineData._id];
                 _characterImage.sprite = characterData._characterIcon;
             }
             else
             {
-                var characterData = InGameManager.Instance._liuCompany.EnemyDataBase[timelineData.ID];
+                var characterData = InGameManager.Instance._liuCompany.EnemyDataBase[timelineData._id];
                 _characterImage.sprite = characterData._characterIcon;
             }
         }

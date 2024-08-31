@@ -891,7 +891,7 @@ PrefabInstance:
       objectReference: {fileID: 323853515}
     - target: {fileID: 6491487146832770831, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
       propertyPath: _onClickUnityAction.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: MoveTimeline
+      value: SkillMoveTimeline
       objectReference: {fileID: 0}
     - target: {fileID: 6491487146832770831, guid: 77520eb67be502a499fc16bd6b9b0698, type: 3}
       propertyPath: _onClickUnityAction.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Threading.Tasks;
@@ -72,40 +73,85 @@ public class InGameViewer : MonoBehaviour
         timelineDataList = timelineContentData;
     }
 
+    private Task _onlyTask;
+    private CancellationTokenSource _cancellationTokenSource;
+
     /// <summary>
-    /// 子オブジェクトの数から丸の配置にします、例12子オブジェクトなら、時計になります。
-    /// value ＊ 12から1までの角度 移動します
+    /// 子オブジェクトの数から丸の配置にします。例：12子オブジェクトなら時計のように配置されます。
+    /// value * 12から1までの角度に従い移動します。
     /// </summary>
     /// <param name="value">移動量</param>
     public async void MoveTimeLineAsync(int value)
     {
+        // 現在のタスクが実行中の場合、キャンセルをリクエスト
+        if (_onlyTask != null && !_onlyTask.IsCompleted)
+        {
+            _cancellationTokenSource?.Cancel();
+        }
+
+        // 新しいキャンセレーショントークンを作成
+        _cancellationTokenSource = new CancellationTokenSource();
+        CancellationToken token = _cancellationTokenSource.Token;
+
+        // 新しいタスクで上書き
+        _onlyTask = MoveTimeLineAsyncTask(value, token);
+        try
+        {
+            await _onlyTask;
+        }
+        catch (OperationCanceledException)
+        {
+            Debug.Log("タスクがキャンセルされました");
+            
+            LiuTility.UpdateContentViewData(timelineDataList, _timeLineParent, _timeLineContentPrefab);
+            int itemCount = _timeLineParent.transform.childCount;
+            float angleStep = 360f / itemCount;
+
+            // キャンセルリクエストがあるかを再確認
+
+            await ArrangeItemsInCircle(0, itemCount, angleStep, token, false);
+        }
+    }
+
+    /// <summary>
+    /// 実際のタイムライン移動を非同期で行うタスク
+    /// </summary>
+    /// <param name="value">移動量</param>
+    /// <param name="token">キャンセレーショントークン</param>
+    /// <returns>Task</returns>
+    private async Task MoveTimeLineAsyncTask(int value, CancellationToken token)
+    {
         int itemCount = _timeLineParent.transform.childCount;
         float angleStep = 360f / itemCount;
 
-        if (value > 0) //時計回り
+        if (value > 0) // 時計回り
         {
             for (int i = 1; i <= value; i++)
             {
-                await ArrangeItemsInCircle(angleStep * i, itemCount, angleStep);
+                token.ThrowIfCancellationRequested(); // キャンセルがリクエストされたら例外をスローして終了
+                await ArrangeItemsInCircle(angleStep * i, itemCount, angleStep, token);
             }
         }
-        else if (value < 0) //反時計回り
+        else if (value < 0) // 反時計回り
         {
             value = Math.Abs(value);
             for (int i = 1; i <= value; i++)
             {
-                await ArrangeItemsInCircle(angleStep * -i, itemCount, angleStep);
+                token.ThrowIfCancellationRequested(); // キャンセルがリクエストされたら例外をスローして終了
+                await ArrangeItemsInCircle(angleStep * -i, itemCount, angleStep, token);
             }
         }
 
         LiuTility.UpdateContentViewData(timelineDataList, _timeLineParent, _timeLineContentPrefab);
         itemCount = _timeLineParent.transform.childCount;
         angleStep = 360f / itemCount;
-        await ArrangeItemsInCircle(0, itemCount, angleStep, false);
+
+        // キャンセルリクエストがあるかを再確認
+        token.ThrowIfCancellationRequested();
+        await ArrangeItemsInCircle(0, itemCount, angleStep, token, false);
     }
 
 
-  
     /// <summary>
     ///  Timelineの子オブジェクトを円形に配置する
     /// </summary>
@@ -113,7 +159,7 @@ public class InGameViewer : MonoBehaviour
     /// <param name="itemCount"> Timelineの子オブジェクト数</param>
     /// <param name="angleStep">移動する角度の間隔</param>
     /// <param name="complement"> 補足：TRUE 移動の補足アニメーション</param>
-    private async Task ArrangeItemsInCircle(float value, int itemCount, float angleStep, bool complement = true)
+    private async Task ArrangeItemsInCircle(float value, int itemCount, float angleStep, CancellationToken token, bool complement = true)
     {
         Task[] moveTasks = new Task[itemCount];
 
@@ -130,9 +176,10 @@ public class InGameViewer : MonoBehaviour
             RectTransform rectTransform = child.GetComponent<RectTransform>();
             if (complement)
             {
+                token.ThrowIfCancellationRequested();
                 moveTasks[i] =
                     LiuTility.MoveComplement(rectTransform, rectTransform.localPosition, new Vector3(x, y, 0), 10,
-                        0.2f);
+                        0.2f, token);
             }
             else
             {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -62,7 +63,7 @@ public static class LiuTility
         }
     }
     
-    public static async Task MoveComplement(RectTransform rectTransform, Vector3 startPosition, Vector3 targetPosition, int divisions, float seconds)
+    public static async Task MoveComplement(RectTransform rectTransform, Vector3 startPosition, Vector3 targetPosition, int divisions, float seconds, CancellationToken token)
     {
         Vector3 difference = targetPosition - startPosition;
         Vector3 step = difference / divisions;
@@ -71,8 +72,10 @@ public static class LiuTility
 
         for (int i = 0; i < divisions; i++)
         {
+            token.ThrowIfCancellationRequested();
+            await Task.Delay((int)(delay * 1000), token); // ミリ秒単位で待機
             rectTransform.localPosition += step;
-            await Task.Delay((int)(delay * 1000)); // ミリ秒単位で待機
+
         }
 
         // 最終的には正確な目標位置に設定

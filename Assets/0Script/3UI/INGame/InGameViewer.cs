@@ -16,8 +16,13 @@ using UnityEngine.Serialization;
 public class InGameViewer : MonoBehaviour
 {
     [Header("HP")] [SerializeField] private Text _characterHp; // キャラクターのHP表示用テキスト
+    [SerializeField] private Text _characterMaxHp; // キャラクターの最大HP表示用テキスト
     [SerializeField] private Slider _characterHpSlider;        // キャラクターのHPスライダー
     [SerializeField] private GameObject _characterHpSliderObj; // HPスライダーのゲームオブジェクト
+    private int _hp;
+    private int _maxHp;
+    
+    
 
     [Header("Player")] [SerializeField] private GameObject _characterBox; // プレイヤーキャラクターを格納するボックス
     [SerializeField] private GameObject _characterContentPrefab;          // プレイヤーキャラクターのコンテンツプレハブ
@@ -51,11 +56,15 @@ public class InGameViewer : MonoBehaviour
     private void UpdateHpText(int hp)
     {
         _characterHp.text = $"{hp}/";
+        _hp = hp;
+        _characterHpSlider.value = (float)hp / _maxHp;
     }
 
     private void UpdateMaxHpText(int maxHp)
     {
         _characterHp.text = maxHp.ToString();
+        _maxHp = maxHp;
+        _characterHpSlider.value = (float)_hp / maxHp;
     }
 
     public void UpdateCharacter(List<int> characterEquipList)

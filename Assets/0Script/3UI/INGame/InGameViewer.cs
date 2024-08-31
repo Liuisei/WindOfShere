@@ -87,6 +87,7 @@ public class InGameViewer : MonoBehaviour
         if (_onlyTask != null && !_onlyTask.IsCompleted)
         {
             _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
         }
 
         // 新しいキャンセレーショントークンを作成
@@ -101,15 +102,12 @@ public class InGameViewer : MonoBehaviour
         }
         catch (OperationCanceledException)
         {
-            Debug.Log("タスクがキャンセルされました");
-            
+            Debug.Log("移動指定タスクがキャンセルされました");
             LiuTility.UpdateContentViewData(timelineDataList, _timeLineParent, _timeLineContentPrefab);
             int itemCount = _timeLineParent.transform.childCount;
             float angleStep = 360f / itemCount;
-
-            // キャンセルリクエストがあるかを再確認
-
             await ArrangeItemsInCircle(0, itemCount, angleStep, token, false);
+            Debug.Log("初期化完了");
         }
     }
 
@@ -121,34 +119,36 @@ public class InGameViewer : MonoBehaviour
     /// <returns>Task</returns>
     private async Task MoveTimeLineAsyncTask(int value, CancellationToken token)
     {
-        int itemCount = _timeLineParent.transform.childCount;
-        float angleStep = 360f / itemCount;
-
-        if (value > 0) // 時計回り
+        try
         {
-            for (int i = 1; i <= value; i++)
+            int itemCount = _timeLineParent.transform.childCount;
+            float angleStep = 360f / itemCount;
+
+            if (value > 0) // 時計回り
             {
-                token.ThrowIfCancellationRequested(); // キャンセルがリクエストされたら例外をスローして終了
-                await ArrangeItemsInCircle(angleStep * i, itemCount, angleStep, token);
+                for (int i = 1; i <= value; i++)
+                {
+                    await ArrangeItemsInCircle(angleStep * i, itemCount, angleStep, token);
+                }
             }
+            else if (value < 0) // 反時計回り
+            {
+                value = Math.Abs(value);
+                for (int i = 1; i <= value; i++)
+                {
+                    await ArrangeItemsInCircle(angleStep * -i, itemCount, angleStep, token);
+                }
+            }
+
+            LiuTility.UpdateContentViewData(timelineDataList, _timeLineParent, _timeLineContentPrefab);
+            itemCount = _timeLineParent.transform.childCount;
+            angleStep = 360f / itemCount;
+            await ArrangeItemsInCircle(0, itemCount, angleStep, token, false);
         }
-        else if (value < 0) // 反時計回り
+        catch (OperationCanceledException)
         {
-            value = Math.Abs(value);
-            for (int i = 1; i <= value; i++)
-            {
-                token.ThrowIfCancellationRequested(); // キャンセルがリクエストされたら例外をスローして終了
-                await ArrangeItemsInCircle(angleStep * -i, itemCount, angleStep, token);
-            }
+            Debug.Log("移動指定タスクがキャンセルされました。");
         }
-
-        LiuTility.UpdateContentViewData(timelineDataList, _timeLineParent, _timeLineContentPrefab);
-        itemCount = _timeLineParent.transform.childCount;
-        angleStep = 360f / itemCount;
-
-        // キャンセルリクエストがあるかを再確認
-        token.ThrowIfCancellationRequested();
-        await ArrangeItemsInCircle(0, itemCount, angleStep, token, false);
     }
 
 
@@ -159,36 +159,70 @@ public class InGameViewer : MonoBehaviour
     /// <param name="itemCount"> Timelineの子オブジェクト数</param>
     /// <param name="angleStep">移動する角度の間隔</param>
     /// <param name="complement"> 補足：TRUE 移動の補足アニメーション</param>
-    private async Task ArrangeItemsInCircle(float value, int itemCount, float angleStep, CancellationToken token, bool complement = true)
+    private async Task ArrangeItemsInCircle(float value, int itemCount, float angleStep, CancellationToken token,
+        bool complement = true)
     {
-        Task[] moveTasks = new Task[itemCount];
-
-        for (int i = 0; i < itemCount; i++)
+        try
         {
-            float angle = i * angleStep; //そいつの元の位置角度
-            angle += value;              // 移動先の角度
+            Task[] moveTasks = new Task[itemCount];
 
-            // 上から時計回りに配置するための座標を計算
-            float y = radius * Mathf.Cos(angle * Mathf.Deg2Rad);
-            float x = radius * Mathf.Sin(angle * Mathf.Deg2Rad);
-            // 各子オブジェクトの位置を設定
-            Transform child = _timeLineParent.transform.GetChild(i);
-            RectTransform rectTransform = child.GetComponent<RectTransform>();
-            if (complement)
+            for (int i = 0; i < itemCount; i++)
+            {
+                float angle = i * angleStep; //そいつの元の位置角度
+                angle += value;              // 移動先の角度
+
+                // 上から時計回りに配置するための座標を計算
+                float y = radius * Mathf.Cos(angle * Mathf.Deg2Rad);
+                float x = radius * Mathf.Sin(angle * Mathf.Deg2Rad);
+                // 各子オブジェクトの位置を設定
+                Transform child = _timeLineParent.transform.GetChild(i);
+                RectTransform rectTransform = child.GetComponent<RectTransform>();
+                if (complement)
+                {
+                    moveTasks[i] =
+                        MoveComplement(rectTransform, rectTransform.localPosition, new Vector3(x, y, 0), 10,
+                            0.2f, token);
+                }
+                else
+                {
+                    rectTransform.localPosition = new Vector3(x, y, 0);
+                }
+            }
+
+            if (moveTasks.Any(t => t == null)) return;
+            // すべてのタスクが完了するのを待つ
+            await Task.WhenAll(moveTasks);
+        }
+        catch (OperationCanceledException)
+        {
+            Debug.Log("位置指定がキャンセルされました。");
+        }
+    }
+
+    public static async Task MoveComplement(RectTransform rectTransform, Vector3 startPosition, Vector3 targetPosition,
+        int divisions, float seconds, CancellationToken token)
+    {
+        try
+        {
+            Vector3 difference = targetPosition - startPosition;
+            Vector3 step = difference / divisions;
+            float delay = seconds / divisions;
+
+
+            for (int i = 0; i < divisions; i++)
             {
                 token.ThrowIfCancellationRequested();
-                moveTasks[i] =
-                    LiuTility.MoveComplement(rectTransform, rectTransform.localPosition, new Vector3(x, y, 0), 10,
-                        0.2f, token);
+                await Task.Delay((int)(delay * 1000), token);
+                if(rectTransform == null) return;// ミリ秒単位で待機
+                rectTransform.localPosition += step;
             }
-            else
-            {
-                rectTransform.localPosition = new Vector3(x, y, 0);
-            }
-        }
 
-        if (moveTasks.Any(t => t == null)) return;
-        // すべてのタスクが完了するのを待つ
-        await Task.WhenAll(moveTasks);
+            // 最終的には正確な目標位置に設定
+            rectTransform.localPosition = targetPosition;
+        }
+        catch (OperationCanceledException)
+        {
+            Debug.Log("位置移動がキャンセルされました。");
+        }
     }
 }

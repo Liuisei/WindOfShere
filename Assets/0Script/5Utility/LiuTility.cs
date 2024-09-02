@@ -1,5 +1,9 @@
+using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public static class LiuTility
 {
@@ -29,4 +33,35 @@ public static class LiuTility
             newContent.GetComponent<IDataViewer>().ViewData(id);
         }
     }
+
+
+    public static void ShiftList<T>(List<T> list, int shiftValue)
+    {
+        int count = list.Count;
+        shiftValue = shiftValue % count; // リストの長さを超えたシフトに対応
+
+        if (shiftValue > 0)
+        {
+            // 右シフト
+            for (int i = 0; i < shiftValue; i++)
+            {
+                T last = list[count - 1];
+                list.RemoveAt(count - 1);
+                list.Insert(0, last);
+            }
+        }
+        else if (shiftValue < 0)
+        {
+            // 左シフト
+            shiftValue = Math.Abs(shiftValue);
+            for (int i = 0; i < shiftValue; i++)
+            {
+                T first = list[0];
+                list.RemoveAt(0);
+                list.Add(first);
+            }
+        }
+    }
+    
+
 }

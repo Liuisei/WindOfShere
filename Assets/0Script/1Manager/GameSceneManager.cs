@@ -8,13 +8,7 @@ public class GameSceneManager : MonoBehaviour
 {
     //MasterSceneで管理されているこのSceneManagerを使いゲームシーンを遷移する。
     public static GameSceneManager Instance;
-    private string _openingSceneName = "null";
-
-    public string OpeningSceneName
-    {
-        get => _openingSceneName;
-        set => _openingSceneName = value;
-    }
+    public string OpeningSceneName = "null";
 
     private void Awake()
     {

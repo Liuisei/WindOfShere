@@ -10,7 +10,6 @@ public class DeckManager : MonoBehaviour
     private static DeckManager _instance;
     private List<int> _deck = new List<int>(3);
     private Dictionary<int, GameObject> _cardIdToCard = new Dictionary<int, GameObject>();
-    private Camera _cam;
     private int _draggingCardId = -1;
     private int _exitingCardId = -1;
 
@@ -45,34 +44,25 @@ public class DeckManager : MonoBehaviour
     private void Awake()
     {
         _instance = this;
-        _cam = Camera.main;
     }
 
     void Start()
     {
         foreach (GameObject slot in slots)
         {
-            if (slot.transform.childCount < 1)
+            if (slot.transform.childCount == 0)
             {
                 _deck.Add(-1);
                 return;
             }
-            _cardIdToCard.Add(slot.transform.GetChild(0).gameObject.GetComponent<TmpCardSc>().Id, slot.transform.GetChild(0).gameObject);
-            _deck.Add(slot.transform.GetChild(0).gameObject.GetComponent<TmpCardSc>().Id);
+            _cardIdToCard.Add(slot.transform.GetChild(0).gameObject.GetComponent<CardInHome>().Id, slot.transform.GetChild(0).gameObject);
+            _deck.Add(slot.transform.GetChild(0).gameObject.GetComponent<CardInHome>().Id);
         }
-    }
-
-    void Update()
-    {
-        // cursor.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        // cursor.transform.position = new Vector3(cursor.transform.position.x, cursor.transform.position.y, 0);
-        cursor.GetComponent<RectTransform>().position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
     }
 
     public void ChangeCardList(int cardId0)
     {
         int cardId1 = _draggingCardId;
-        Debug.Log($"ChangeCardList: {cardId0}, {cardId1}");
         if (cardId0 == cardId1) { return; }
         int index0 = _deck.IndexOf(cardId0);
         int index1 = _deck.IndexOf(cardId1);
@@ -81,7 +71,6 @@ public class DeckManager : MonoBehaviour
         _cardIdToCard[cardId0].transform.position = slots[index1].transform.position;
         _cardIdToCard[cardId1].transform.SetParent(slots[index0].transform);
         _cardIdToCard[cardId1].transform.position = slots[index0].transform.position;
-        Debug.Log(string.Join(", ", Deck));
     }
 
     public void ReturnCard()

@@ -747,14 +747,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _characterHp: {fileID: 3672041360861836481}
-  _characterHpSliderSlider: {fileID: 5227826160997172941}
-  _characterHpSlider: {fileID: 2530588610022511004}
+  _characterHpSlider: {fileID: 5227826160997172941}
+  _characterHpSliderObj: {fileID: 0}
   _characterBox: {fileID: 7621980106599038420}
-  _characterContentPrefub: {fileID: 7313703625976121993, guid: 57f3e16986378724892eb22c73caa7b2, type: 3}
+  _characterContentPrefab: {fileID: 0}
   _enemyContent: {fileID: 8031677465062828329}
   _enemyContentPrefab: {fileID: 7313703625976121993, guid: 2894577a78d24bf4e934acd690f1f2bd, type: 3}
   _timeLine: {fileID: 9150623764970756780}
   _timeLineContentPrefab: {fileID: 7673021541091838782, guid: 86922f89ce755d747ad419996a0715f4, type: 3}
+  radius: 100
 --- !u!1 &9150623764970756780
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 /// このクラスでは、Observerパターンを使ってUIの変化を管理します。
 /// ユーザーからの入力は受け付けません。
 /// </summary>
-[DefaultExecutionOrder(100)]
+//[DefaultExecutionOrder(100)]
 public class InGameViewer : MonoBehaviour
 {
     [Header("HP")] [SerializeField] private Text _characterHp; // キャラクターのHP表示用テキスト
